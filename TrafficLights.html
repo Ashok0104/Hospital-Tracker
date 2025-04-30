@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Rescue - Emergency Response System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="script.css">
+    <!-- Leaflet CSS - Free Map API -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <!-- Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div id="landing-page" class="landing-container">
+        <div class="landing-content animate__animated animate__fadeIn">
+            <div class="landing-logo animate__animated animate__pulse animate__infinite animate__slower">
+                <svg width="150" height="150" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="#0066cc"/>
+                    <path d="M50 20 L35 50 L65 50 Z" fill="white"/>
+                    <path d="M50 80 L35 50 L65 50 Z" fill="white"/>
+                    <circle cx="50" cy="50" r="10" fill="white" stroke="#0066cc" stroke-width="3"/>
+                </svg>
+            </div>
+            <h1 class="landing-title animate__animated animate__fadeInDown animate__delay-1s">Public Rescue</h1>
+            <p class="landing-subtitle animate__animated animate__fadeInUp animate__delay-1s">Advanced Emergency Response & Smart Traffic Management</p>
+            <div class="landing-images">
+                <div class="landing-image animate__animated animate__fadeIn animate__delay-2s"></div>
+                <div class="landing-image animate__animated animate__fadeIn animate__delay-2s"></div>
+                <div class="landing-image animate__animated animate__fadeIn animate__delay-2s"></div>
+            </div>
+            <p class="landing-description animate__animated animate__fadeIn animate__delay-3s">
+                Revolutionizing emergency services with AI-powered solutions, real-time tracking, and rapid response mechanisms.
+            </p>
+            <a href="#" class="state-cta-btn animate__animated animate__bounceIn animate__delay-3s" onclick="enterDashboard()">Enter Emergency Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="dashboard-container hidden">
+        <header class="main-header">
+            <div class="logo-container">
+                <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="#0066cc"/>
+                    <path d="M50 20 L35 50 L65 50 Z" fill="white"/>
+                    <path d="M50 80 L35 50 L65 50 Z" fill="white"/>
+                    <circle cx="50" cy="50" r="10" fill="white" stroke="#0066cc" stroke-width="3"/>
+                </svg>
+                <h2>Public Rescue</h2>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="#" onclick="showEmergencyHistory()">History</a></li>
+                    <li><a href="#" onclick="showSettings()">Settings</a></li>
+                    <li><a href="#" class="emergency-btn" onclick="triggerEmergencyMode()">Emergency Mode</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="sidebar">
+                <h2>Emergency Control Center</h2>
+                
+                <div class="input-section">
+                    <div class="input-group">
+                        <label>Current Location</label>
+                        <div class="location-group">
+                            <button id="use-current-location" onclick="useCurrentLocation()" class="location-btn">
+                                <span class="location-icon">📍</span> Get My Location
+                            </button>
+                            <div class="location-status" id="location-status">Waiting for location...</div>
+                        </div>
+                    </div>
+
+                    <div class="input-group search-group">
+                        <label>Search Location</label>
+                        <div class="search-container">
+                            <input type="text" id="location-search" placeholder="Search any address...">
+                            <button id="search-btn" onclick="searchLocation()">
+                                <span class="search-icon">🔍</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Emergency Classification</label>
+                        <select id="emergency-type" required title="Select the type of emergency">
+                            <option value="accident" selected>Road Accident</option>
+                            <option value="cardiac">Cardiac Emergency</option>
+                            <option value="neuro">Neurological Emergency</option>
+                            <option value="trauma">Trauma/Injury</option>
+                            <option value="respiratory">Respiratory Distress</option>
+                            <option value="burn">Burn Emergency</option>
+                            <option value="drowning">Drowning</option>
+                            <option value="poisoning">Poisoning</option>
+                            <option value="obstetric">Obstetric Emergency</option>
+                            <option value="pediatric">Pediatric Emergency</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Priority Level</label>
+                        <div class="priority-selector">
+                            <label class="radio-container">
+                                <input type="radio" name="priority" value="low">
+                                <span class="radio-label">Low</span>
+                            </label>
+                            <label class="radio-container">
+                                <input type="radio" name="priority" value="medium" checked>
+                                <span class="radio-label">Medium</span>
+                            </label>
+                            <label class="radio-container">
+                                <input type="radio" name="priority" value="high">
+                                <span class="radio-label">High</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button onclick="findNearestHospital()" class="dashboard-btn primary-btn">Find Nearest Hospital</button>
+                    <button onclick="dispatchEmergencyVehicle()" class="dashboard-btn success-btn">Dispatch Vehicle</button>
+                    <button onclick="resetDashboard()" class="dashboard-btn secondary-btn">Reset</button>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="action-grid">
+                        <button onclick="showAllHealthcareOptions()" class="quick-action-btn">All Healthcare</button>
+                        <button onclick="toggleTrafficLayer()" class="quick-action-btn" id="traffic-btn">Live Traffic</button>
+                        <button onclick="trackActiveAmbulances()" class="quick-action-btn" id="track-btn">Track Ambulance</button>
+                        <button onclick="showAlternativeRoutes()" class="quick-action-btn">Alt Routes</button>
+                    </div>
+                </div>
+
+                <div class="emergency-status" id="status-container">
+                    <h3>Emergency Status</h3>
+                    <div class="status-details">
+                        <div class="status-item">
+                            <span class="status-label">Current Status:</span>
+                            <span class="status-value" id="current-status">Ready</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Destination:</span>
+                            <span class="status-value" id="destination-value">Not Selected</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">ETA:</span>
+                            <span class="status-value" id="eta-value">--:--</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Distance:</span>
+                            <span class="status-value" id="distance-value">-- km</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Weather:</span>
+                            <span class="status-value" id="weather-status">Checking...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <div id="map"></div>
+                <div class="map-controls">
+                    <button onclick="zoomIn()" class="map-control-btn" title="Zoom In">➕</button>
+                    <button onclick="zoomOut()" class="map-control-btn" title="Zoom Out">➖</button>
+                    <button onclick="centerOnCurrentLocation()" class="map-control-btn" title="Center on My Location">📍</button>
+                    <button onclick="toggleMapStyle()" class="map-control-btn" title="Change Map Style">🗺️</button>
+                    <button onclick="showDirectionsPanel()" class="map-control-btn" id="directions-btn" title="Show Directions">🧭</button>
+                </div>
+                <div id="directions-panel" class="directions-panel hidden">
+                    <div class="directions-header">
+                        <h3>Directions</h3>
+                        <button onclick="hideDirectionsPanel()" class="close-btn">×</button>
+                    </div>
+                    <div class="directions-content" id="directions-content">
+                        <!-- Directions will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Healthcare Options Modal -->
+    <div id="healthcare-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeHealthcareModal()">&times;</span>
+            <h2>Healthcare Options</h2>
+            <div class="healthcare-tabs">
+                <button class="tab-btn active" onclick="showTab('hospitals')">Hospitals</button>
+                <button class="tab-btn" onclick="showTab('clinics')">Clinics</button>
+                <button class="tab-btn" onclick="showTab('specialized')">Specialized</button>
+            </div>
+            <div class="healthcare-content">
+                <div id="hospitals-tab" class="tab-content active">
+                    <div class="healthcare-list" id="hospitals-list">
+                        <!-- Hospital list will be populated dynamically -->
+                    </div>
+                </div>
+                <div id="clinics-tab" class="tab-content">
+                    <div class="healthcare-list" id="clinics-list">
+                        <!-- Clinics list will be populated dynamically -->
+                    </div>
+                </div>
+                <div id="specialized-tab" class="tab-content">
+                    <div class="healthcare-list" id="specialized-list">
+                        <!-- Specialized centers list will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Facility Details Modal -->
+    <div id="facility-details-modal" class="modal">
+        <div class="facility-details-content">
+            <span class="close-btn" onclick="closeFacilityDetailsModal()">&times;</span>
+            <div class="facility-header">
+                <h2 id="facility-name">Facility Name</h2>
+                <div class="facility-type" id="facility-type">Hospital</div>
+            </div>
+            <div class="facility-image" id="facility-image"></div>
+            <div class="facility-actions">
+                <button onclick="navigateToFacility()" class="primary-btn">Navigate Here</button>
+                <button onclick="callFacility()" class="secondary-btn">Call</button>
+            </div>
+            <div class="facility-details-grid">
+                <div class="facility-detail-item">
+                    <div class="detail-label">Address</div>
+                    <div id="facility-address">Loading...</div>
+                </div>
+                <div class="facility-detail-item">
+                    <div class="detail-label">Distance</div>
+                    <div id="facility-distance">Loading...</div>
+                </div>
+                <div class="facility-detail-item">
+                    <div class="detail-label">ETA</div>
+                    <div id="facility-eta">Loading...</div>
+                </div>
+                <div class="facility-detail-item">
+                    <div class="detail-label">Emergency Hours</div>
+                    <div id="facility-hours">24/7</div>
+                </div>
+                <div class="facility-detail-item">
+                    <div class="detail-label">Specialty</div>
+                    <div id="facility-specialty">General</div>
+                </div>
+                <div class="facility-detail-item">
+                    <div class="detail-label">Beds Available</div>
+                    <div id="facility-beds">--</div>
+                </div>
+            </div>
+            <div class="facility-services">
+                <h3>Available Services</h3>
+                <div class="services-list" id="facility-services-list">
+                    <!-- Services will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Traffic Control Modal -->
+    <div id="traffic-control-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeTrafficControlModal()">&times;</span>
+            <h2>Emergency Traffic Control</h2>
+            <div class="traffic-light-container">
+                <div id="traffic-light-grid" class="traffic-light-grid">
+                    <!-- Traffic lights will be generated dynamically -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button onclick="createGreenCorridor()" class="corridor-btn">Create Green Corridor</button>
+                <button onclick="overrideTrafficLights()" class="override-btn">Override All Lights</button>
+                <button onclick="resetTrafficLights()" class="reset-btn">Reset All Lights</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">Loading...</p>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- Leaflet JS - Free Map API -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
