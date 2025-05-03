@@ -863,7 +863,7 @@ function findNearestHospital() {
 
     setTimeout(() => {
         hideLoading();
-        showNotification("Hospital Found", `Nearest hospital: ${nearestHospital.name} (${nearestHospital.distance} km)`, "success");
+        showHospitalFound(nearestHospital);
     }, 1000);
 }
 
@@ -1120,7 +1120,7 @@ function createRoute(fromLat, fromLng, toLat, toLng) {
             showDirectionsPanel();
 
             // Notify user
-            showNotification("Directions Ready", "Turn-by-turn directions to hospital are ready", "success");
+            showDirectionsReady();
         }
     });
 }
@@ -1159,6 +1159,7 @@ function populateDirectionsPanel(instructions) {
     });
 
     directionsContent.appendChild(directionsList);
+    showDirectionsReady();
 }
 
 // Show directions panel
@@ -1173,86 +1174,64 @@ function hideDirectionsPanel() {
 
 // Show all healthcare options in modal
 function showAllHealthcareOptions() {
-    if (!userLocation) {
-        showNotification("Location Missing", "Please set your location first", "error");
-        return;
-    }
-
-    // Sort facilities by distance
-    const sortedHospitals = [...hospitals].sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
-    const sortedClinics = [...clinics].sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
-    const sortedSpecialized = [...specializedCenters].sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
-
-    // Populate hospital list
+    const modal = document.getElementById('healthcare-modal');
+    
+    // Populate hospitals list
     const hospitalsList = document.getElementById('hospitals-list');
-    hospitalsList.innerHTML = '';
-
-    sortedHospitals.forEach(hospital => {
-        const item = document.createElement('div');
-        item.className = 'healthcare-item';
-        item.innerHTML = `
+    hospitalsList.innerHTML = hospitals.map(hospital => `
+        <div class="healthcare-item" onclick="showFacilityDetails(${hospital.id}, 'hospital')">
             <div class="healthcare-item-header">
                 <h3>${hospital.name}</h3>
-                <span class="distance-badge">${hospital.distance} km</span>
+                <span class="healthcare-type">Hospital</span>
             </div>
-            <p>${hospital.address}</p>
-            <p><strong>ETA:</strong> ${hospital.eta} minutes</p>
-            <p><strong>Specialty:</strong> ${hospital.specialty}</p>
-            <button class="view-details-btn" onclick="showFacilityDetails(${hospital.id}, 'hospital')">View Details</button>
-        `;
-        hospitalsList.appendChild(item);
-    });
+            <div class="healthcare-item-details">
+                <p><i class="fas fa-map-marker-alt"></i> ${hospital.address}</p>
+                <p><i class="fas fa-road"></i> ${hospital.distance} km away</p>
+                <p><i class="fas fa-clock"></i> ${hospital.eta} min ETA</p>
+            </div>
+        </div>
+    `).join('');
 
     // Populate clinics list
     const clinicsList = document.getElementById('clinics-list');
-    clinicsList.innerHTML = '';
-
-    sortedClinics.forEach(clinic => {
-        const item = document.createElement('div');
-        item.className = 'healthcare-item';
-        item.innerHTML = `
+    clinicsList.innerHTML = clinics.map(clinic => `
+        <div class="healthcare-item" onclick="showFacilityDetails(${clinic.id}, 'clinic')">
             <div class="healthcare-item-header">
                 <h3>${clinic.name}</h3>
-                <span class="distance-badge">${clinic.distance} km</span>
+                <span class="healthcare-type">Clinic</span>
             </div>
-            <p>${clinic.address}</p>
-            <p><strong>ETA:</strong> ${clinic.eta} minutes</p>
-            <p><strong>Specialty:</strong> ${clinic.specialty}</p>
-            <button class="view-details-btn" onclick="showFacilityDetails(${clinic.id}, 'clinic')">View Details</button>
-        `;
-        clinicsList.appendChild(item);
-    });
+            <div class="healthcare-item-details">
+                <p><i class="fas fa-map-marker-alt"></i> ${clinic.address}</p>
+                <p><i class="fas fa-road"></i> ${clinic.distance} km away</p>
+                <p><i class="fas fa-clock"></i> ${clinic.eta} min ETA</p>
+            </div>
+        </div>
+    `).join('');
 
     // Populate specialized centers list
     const specializedList = document.getElementById('specialized-list');
-    specializedList.innerHTML = '';
-
-    sortedSpecialized.forEach(center => {
-        const item = document.createElement('div');
-        item.className = 'healthcare-item';
-        item.innerHTML = `
+    specializedList.innerHTML = specializedCenters.map(center => `
+        <div class="healthcare-item" onclick="showFacilityDetails(${center.id}, 'specialized')">
             <div class="healthcare-item-header">
                 <h3>${center.name}</h3>
-                <span class="distance-badge">${center.distance} km</span>
+                <span class="healthcare-type">Specialized Center</span>
             </div>
-            <p>${center.address}</p>
-            <p><strong>ETA:</strong> ${center.eta} minutes</p>
-            <p><strong>Specialty:</strong> ${center.specialty}</p>
-            <button class="view-details-btn" onclick="showFacilityDetails(${center.id}, 'specialized')">View Details</button>
-        `;
-        specializedList.appendChild(item);
-    });
+            <div class="healthcare-item-details">
+                <p><i class="fas fa-map-marker-alt"></i> ${center.address}</p>
+                <p><i class="fas fa-road"></i> ${center.distance} km away</p>
+                <p><i class="fas fa-clock"></i> ${center.eta} min ETA</p>
+            </div>
+        </div>
+    `).join('');
 
-    // Show the modal
-    document.getElementById('healthcare-modal').style.display = 'flex';
-
-    // Set first tab as active by default
-    showTab('hospitals');
+    modal.style.display = 'block';
+    showTab('hospitals'); // Show hospitals tab by default
 }
 
 // Close healthcare modal
 function closeHealthcareModal() {
-    document.getElementById('healthcare-modal').style.display = 'none';
+    const modal = document.getElementById('healthcare-modal');
+    modal.style.display = 'none';
 }
 
 // Show specific tab in healthcare modal
@@ -1272,55 +1251,72 @@ function showTab(tabName) {
 
 // Show facility details modal
 function showFacilityDetails(facilityId, facilityType) {
-    let facility;
+    const facility = facilityType === 'hospital' ? 
+        hospitals.find(h => h.id === facilityId) :
+        facilityType === 'clinic' ? 
+            clinics.find(c => c.id === facilityId) :
+            specializedCenters.find(s => s.id === facilityId);
 
-    // Find the selected facility
-    if (facilityType === 'hospital') {
-        facility = hospitals.find(h => h.id === facilityId);
-    } else if (facilityType === 'clinic') {
-        facility = clinics.find(c => c.id === facilityId);
-    } else if (facilityType === 'specialized') {
-        facility = specializedCenters.find(s => s.id === facilityId);
-    }
+    if (!facility) return;
 
-    if (!facility) {
-        showNotification("Error", "Facility not found", "error");
-        return;
-    }
+    const modal = document.getElementById('facility-details-modal');
+    const content = `
+        <div class="facility-details-header">
+            <h2>${facility.name}</h2>
+            <button class="close-btn" onclick="closeFacilityDetailsModal()">&times;</button>
+        </div>
+        <div class="facility-details-content">
+            <div class="facility-info-section">
+                <div class="facility-info-grid">
+                    <div class="facility-info-item">
+                        <span class="facility-info-label">Address</span>
+                        <span class="facility-info-value">${facility.address}</span>
+                    </div>
+                    <div class="facility-info-item">
+                        <span class="facility-info-label">Distance</span>
+                        <span class="facility-info-value">${facility.distance} km</span>
+                    </div>
+                    <div class="facility-info-item">
+                        <span class="facility-info-label">ETA</span>
+                        <span class="facility-info-value">${facility.eta} minutes</span>
+                    </div>
+                    <div class="facility-info-item">
+                        <span class="facility-info-label">Emergency Hours</span>
+                        <span class="facility-info-value">${facility.emergencyHours || '24/7'}</span>
+                    </div>
+                    <div class="facility-info-item">
+                        <span class="facility-info-label">Specialty</span>
+                        <span class="facility-info-value">${facility.specialty || 'General'}</span>
+                    </div>
+                    <div class="facility-info-item">
+                        <span class="facility-info-label">Beds Available</span>
+                        <span class="facility-info-value">${facility.bedsAvailable || '--'}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="facility-info-section">
+                <h3>Available Services</h3>
+                <div class="services-list">
+                    ${facility.services ? facility.services.map(service => 
+                        `<div class="service-item">${service}</div>`
+                    ).join('') : '<div class="service-item">No services listed</div>'}
+                </div>
+            </div>
 
-    // Store selected facility
-    selectedFacility = facility;
+            <div class="facility-actions">
+                <button class="facility-action-btn navigate-btn" onclick="navigateToFacility()">
+                    Navigate Here
+                </button>
+                <button class="facility-action-btn call-btn" onclick="callFacility()">
+                    Call
+                </button>
+            </div>
+        </div>
+    `;
 
-    // Populate facility details
-    document.getElementById('facility-name').textContent = facility.name;
-    document.getElementById('facility-type').textContent = facility.type;
-    document.getElementById('facility-address').textContent = facility.address;
-    document.getElementById('facility-distance').textContent = `${facility.distance} km`;
-    document.getElementById('facility-eta').textContent = `${facility.eta} minutes`;
-    document.getElementById('facility-hours').textContent = facility.hours;
-    document.getElementById('facility-specialty').textContent = facility.specialty;
-    document.getElementById('facility-beds').textContent = facility.beds;
-
-    // Add a fake facility image
-    const randomImageNum = Math.floor(Math.random() * 3) + 1;
-    document.getElementById('facility-image').style.backgroundImage = `url('https://via.placeholder.com/400x200?text=${facility.type}+${randomImageNum}')`;
-
-    // Populate services list
-    const servicesList = document.getElementById('facility-services-list');
-    servicesList.innerHTML = '';
-
-    facility.services.forEach(service => {
-        const serviceItem = document.createElement('div');
-        serviceItem.className = 'service-item';
-        serviceItem.textContent = service;
-        servicesList.appendChild(serviceItem);
-    });
-
-    // Show the facility details modal
-    document.getElementById('facility-details-modal').style.display = 'flex';
-
-    // Close the healthcare modal
-    closeHealthcareModal();
+    modal.innerHTML = content;
+    modal.style.display = 'block';
 }
 
 // Close facility details modal
@@ -1547,47 +1543,36 @@ function showAlternativeRoutes() {
 
 // Show traffic control modal
 function showTrafficControlModal() {
-    // Generate traffic light grid
-    const trafficLightGrid = document.getElementById('traffic-light-grid');
-    trafficLightGrid.innerHTML = '';
-
-    // Create a 4x4 grid of traffic lights
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            const trafficLight = document.createElement('div');
-            trafficLight.className = 'traffic-light';
-            trafficLight.dataset.row = i;
-            trafficLight.dataset.col = j;
-
-            // Randomly set initial state
-            const randomState = Math.random();
-            let state = 'red';
-
-            if (randomState < 0.3) {
-                state = 'green';
-            } else if (randomState < 0.6) {
-                state = 'yellow';
-            }
-
-            trafficLight.dataset.state = state;
-            trafficLight.classList.add(state);
-
-            // Add click handler to toggle state
-            trafficLight.addEventListener('click', function() {
-                toggleTrafficLightState(this);
-            });
-
-            trafficLightGrid.appendChild(trafficLight);
+    const modal = document.getElementById('traffic-control-modal');
+    modal.style.display = 'block';
+    
+    // Generate traffic lights grid if not already generated
+    const grid = document.getElementById('traffic-light-grid');
+    if (!grid.children.length) {
+        for (let i = 0; i < 25; i++) {
+            const light = document.createElement('div');
+            light.className = 'traffic-light';
+            light.dataset.id = `light-${i + 1}`;
+            light.dataset.row = Math.floor(i / 5) + 1;
+            light.dataset.col = (i % 5) + 1;
+            light.dataset.state = 'red';
+            
+            light.innerHTML = `
+                <div class="traffic-light-id">Light ${i + 1}</div>
+                <div class="traffic-light-status"></div>
+                <div class="traffic-light-location">Intersection ${Math.floor(i / 5) + 1}-${(i % 5) + 1}</div>
+            `;
+            
+            light.onclick = () => toggleTrafficLightState(light);
+            grid.appendChild(light);
         }
     }
-
-    // Show the modal
-    document.getElementById('traffic-control-modal').style.display = 'flex';
 }
 
 // Close traffic control modal
 function closeTrafficControlModal() {
-    document.getElementById('traffic-control-modal').style.display = 'none';
+    const modal = document.getElementById('traffic-control-modal');
+    modal.style.display = 'none';
 }
 
 // Toggle traffic light state
@@ -1907,33 +1892,312 @@ function hideLoading() {
 
 // Show notification
 function showNotification(title, message, type = "info", duration = 3000) {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
+    // Create toast container if it doesn't exist
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container';
+        document.body.appendChild(toastContainer);
+    }
 
-    notification.innerHTML = `
-        <div class="notification-header">
-            <h3>${title}</h3>
-            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    // Get icon based on type
+    const icon = getNotificationIcon(type);
+    
+    toast.innerHTML = `
+        <i class="fas ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <p class="toast-message">${message}</p>
         </div>
-        <p>${message}</p>
+        <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
     `;
 
-    document.getElementById('notification-container').appendChild(notification);
+    // Add toast to container
+    toastContainer.appendChild(toast);
 
-    // Add animation classes
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 10);
-
-    // Auto-remove after duration
-    setTimeout(() => {
-        notification.classList.remove('show');
-
-        // Remove from DOM after fade out
+    // Auto remove after duration
+    if (duration > 0) {
         setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, duration);
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, duration);
+    }
+}
+
+function getNotificationIcon(type) {
+    switch (type) {
+        case 'success':
+            return 'fa-check-circle';
+        case 'error':
+            return 'fa-exclamation-circle';
+        case 'warning':
+            return 'fa-exclamation-triangle';
+        default:
+            return 'fa-info-circle';
+    }
+}
+
+function showDirectionsReady() {
+    showNotification("Directions Ready", "Turn-by-turn directions to hospital are ready", "success");
+}
+
+function showHospitalFound(hospital) {
+    showNotification("Hospital Found", `Nearest hospital: ${hospital.name} (${hospital.distance} km)`, "success");
+}
+
+// Update other notification calls to use the new modal system
+function findNearestHospital() {
+    if (!userLocation) {
+        showNotification("Location Missing", "Please set your location first", "error");
+        return;
+    }
+
+    const nearestHospital = hospitals.reduce((nearest, current) => {
+        return parseFloat(current.distance) < parseFloat(nearest.distance) ? current : nearest;
+    });
+
+    showHospitalFound(nearestHospital);
+    // ... rest of the function
+}
+
+function populateDirectionsPanel(instructions) {
+    // ... existing code ...
+    showDirectionsReady();
+    // ... rest of the function
+}
+
+// Function to switch between quick action tabs
+function showQuickActionTab(tabName) {
+    // Remove active class from all tab buttons
+    const tabButtons = document.querySelectorAll('.quick-tab-btn');
+    tabButtons.forEach(btn => btn.classList.remove('active'));
+
+    // Add active class to the clicked tab button
+    const activeButton = Array.from(tabButtons).find(btn => btn.textContent.toLowerCase() === tabName.toLowerCase());
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
+
+    // Hide all quick action tabs
+    const tabs = document.querySelectorAll('.quick-action-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    // Show the selected tab
+    const selectedTab = document.getElementById(`${tabName}-tab`);
+    if (selectedTab) {
+        selectedTab.classList.add('active');
+    }
+}
+
+// Modal functions
+function showModal(title, content) {
+    const modalContainer = document.getElementById('modal-container');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+
+    modalTitle.textContent = title;
+    modalBody.innerHTML = content;
+    modalContainer.classList.remove('hidden');
+}
+
+function closeModal() {
+    const modalContainer = document.getElementById('modal-container');
+    modalContainer.classList.add('hidden');
+}
+
+// Show emergency contacts
+function showEmergencyContacts() {
+    const contacts = [
+        { name: "Police", number: "911" },
+        { name: "Fire Department", number: "911" },
+        { name: "Ambulance", number: "911" },
+        { name: "Poison Control", number: "1-800-222-1222" },
+        { name: "Local Hospital", number: "123-456-7890" }
+    ];
+
+    const content = `
+        <div class="emergency-contacts-list">
+            ${contacts.map(contact => `
+                <div class="contact-item">
+                    <span class="contact-name">${contact.name}</span>
+                    <span class="contact-number">${contact.number}</span>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    showModal("Emergency Contacts", content);
+}
+
+// Show first aid guide
+function showFirstAidGuide() {
+    const steps = [
+        "Check the scene for safety.",
+        "Call emergency services if needed.",
+        "Provide CPR if the person is unresponsive and not breathing.",
+        "Control bleeding with clean cloth.",
+        "Treat for shock by keeping the person warm.",
+        "Do not move the person unless necessary.",
+        "Follow instructions from emergency responders."
+    ];
+
+    const content = `
+        <div class="first-aid-steps">
+            ${steps.map((step, index) => `
+                <div class="first-aid-step">
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">${step}</div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    showModal("First Aid Guide", content);
+}
+
+// Show weather alerts
+function showWeatherAlerts() {
+    if (!weatherData) {
+        showNotification("Weather Alerts", "No weather data available.", "info");
+        return;
+    }
+
+    const content = `
+        <div class="weather-alert">
+            <div class="weather-icon">${weatherData.icon}</div>
+            <div class="weather-condition">${weatherData.condition}</div>
+            <div class="weather-impact">${weatherData.impact}</div>
+        </div>
+    `;
+
+    showModal("Weather Alert", content);
+}
+
+// Show nearby services
+function showNearbyServices() {
+    const services = [
+        { name: "Pharmacy", distance: "1.2 km" },
+        { name: "Gas Station", distance: "2.5 km" },
+        { name: "Grocery Store", distance: "3.0 km" },
+        { name: "Police Station", distance: "1.8 km" },
+        { name: "Fire Station", distance: "2.0 km" }
+    ];
+
+    const content = `
+        <div class="services-list">
+            ${services.map(service => `
+                <div class="service-item">
+                    <span class="service-name">${service.name}</span>
+                    <span class="service-distance">${service.distance}</span>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    showModal("Nearby Services", content);
+}
+
+// Show help guide
+function showHelpGuide() {
+    const helpSections = [
+        {
+            title: "Emergency Tab",
+            items: [
+                "Use for quick emergency actions",
+                "Find nearest hospital",
+                "Access emergency contacts",
+                "View first aid guide",
+                "Share your location"
+            ]
+        },
+        {
+            title: "Navigation Tab",
+            items: [
+                "Find healthcare facilities",
+                "View live traffic information",
+                "Check alternative routes",
+                "Track active ambulances"
+            ]
+        },
+        {
+            title: "Information Tab",
+            items: [
+                "View weather alerts",
+                "Find nearby services",
+                "Accessibility options",
+                "Get help and support"
+            ]
+        }
+    ];
+
+    const content = `
+        <div class="help-sections">
+            ${helpSections.map(section => `
+                <div class="help-section">
+                    <h3>${section.title}</h3>
+                    <ul>
+                        ${section.items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    showModal("Help Guide", content);
+}
+
+// Share current location
+function shareLocation() {
+    if (!userLocation) {
+        showNotification("Location Missing", "Please set your location first", "error");
+        return;
+    }
+
+    const locationUrl = `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
+    navigator.clipboard.writeText(locationUrl).then(() => {
+        const modal = document.getElementById('modal-container');
+        const content = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Location Shared</h2>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="share-success-message">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Your current location URL has been copied to clipboard.</p>
+                        <div class="location-url-preview">
+                            <code>${locationUrl}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        modal.innerHTML = content;
+        modal.classList.remove('hidden');
+    }).catch(err => {
+        showNotification("Error", "Failed to copy location URL", "error");
+    });
+}
+
+// Toggle accessibility options
+let accessibilityEnabled = false;
+function toggleAccessibilityOptions() {
+    accessibilityEnabled = !accessibilityEnabled;
+
+    if (accessibilityEnabled) {
+        document.body.classList.add('accessibility-mode');
+        showNotification("Accessibility Enabled", "Accessibility features have been enabled.", "success");
+    } else {
+        document.body.classList.remove('accessibility-mode');
+        showNotification("Accessibility Disabled", "Accessibility features have been disabled.", "info");
+    }
 }
 
 // Add enhanced 3D building markers for hospitals
@@ -2007,3 +2271,191 @@ function adjustColor(color, amount) {
     // Convert back to hex
     return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
+
+// User Interface Functions
+function toggleUserMenu() {
+    const dropdown = document.querySelector('.user-dropdown');
+    dropdown.classList.toggle('hidden');
+}
+
+function showDashboard() {
+    // Hide all other sections
+    hideAllSections();
+    // Show dashboard
+    document.getElementById('dashboard-page').classList.remove('hidden');
+    // Update active nav item
+    updateActiveNav('Dashboard');
+}
+
+function showEmergencyHistory() {
+    // Hide all other sections
+    hideAllSections();
+    // Show history modal
+    document.getElementById('history-modal').classList.remove('hidden');
+    // Update active nav item
+    updateActiveNav('History');
+}
+
+function showSettings() {
+    // Hide all other sections
+    hideAllSections();
+    // Show settings modal
+    document.getElementById('settings-modal').classList.remove('hidden');
+    // Update active nav item
+    updateActiveNav('Settings');
+}
+
+function showProfile() {
+    // Hide user dropdown
+    document.querySelector('.user-dropdown').classList.add('hidden');
+    // Show profile modal
+    showModal('Profile', 'profile-content');
+}
+
+function showPreferences() {
+    // Hide user dropdown
+    document.querySelector('.user-dropdown').classList.add('hidden');
+    // Show preferences modal
+    showModal('Preferences', 'preferences-content');
+}
+
+function showHelp() {
+    // Hide user dropdown
+    document.querySelector('.user-dropdown').classList.add('hidden');
+    // Show help modal
+    showModal('Help & Support', 'help-content');
+}
+
+function logout() {
+    // Clear user session
+    localStorage.removeItem('userSession');
+    // Redirect to login page
+    window.location.href = 'login.html';
+}
+
+function hideAllSections() {
+    // Hide all main sections
+    document.getElementById('dashboard-page').classList.add('hidden');
+    document.getElementById('history-modal').classList.add('hidden');
+    document.getElementById('settings-modal').classList.add('hidden');
+}
+
+function updateActiveNav(activeItem) {
+    // Remove active class from all nav items
+    document.querySelectorAll('.main-nav a').forEach(item => {
+        item.classList.remove('active');
+    });
+    // Add active class to clicked item
+    const activeNavItem = Array.from(document.querySelectorAll('.main-nav a'))
+        .find(item => item.textContent === activeItem);
+    if (activeNavItem) {
+        activeNavItem.classList.add('active');
+    }
+}
+
+function showModal(title, contentId) {
+    const modal = document.getElementById('modal-container');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    
+    modalTitle.textContent = title;
+    modalBody.innerHTML = document.getElementById(contentId).innerHTML;
+    modal.classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal-container').classList.add('hidden');
+}
+
+// Route Functions
+function calculateRoute() {
+    const startLocation = document.getElementById('start-location').value;
+    const endLocation = document.getElementById('end-location').value;
+    
+    if (!startLocation || !endLocation) {
+        showNotification('Please enter both start and end locations', 'error');
+        return;
+    }
+    
+    // Use Leaflet Routing Machine to calculate route
+    const routingControl = L.Routing.control({
+        waypoints: [
+            L.latLng(startLocation),
+            L.latLng(endLocation)
+        ],
+        routeWhileDragging: true,
+        serviceUrl: 'https://router.project-osrm.org/route/v1'
+    }).addTo(map);
+}
+
+function reverseRoute() {
+    const startLocation = document.getElementById('start-location').value;
+    const endLocation = document.getElementById('end-location').value;
+    
+    if (!startLocation || !endLocation) {
+        showNotification('Please enter both start and end locations', 'error');
+        return;
+    }
+    
+    // Swap start and end locations
+    document.getElementById('start-location').value = endLocation;
+    document.getElementById('end-location').value = startLocation;
+    
+    // Recalculate route
+    calculateRoute();
+}
+
+function showAlternativeRoutes() {
+    const routingControl = L.Routing.control({
+        alternatives: true,
+        serviceUrl: 'https://router.project-osrm.org/route/v1'
+    });
+    
+    // Show alternatives in the routing-alternatives div
+    const alternativesDiv = document.getElementById('routing-alternatives');
+    alternativesDiv.innerHTML = ''; // Clear existing alternatives
+    
+    // Add alternative routes to the div
+    routingControl.on('routesfound', function(e) {
+        e.routes.forEach((route, i) => {
+            const routeDiv = document.createElement('div');
+            routeDiv.className = 'alternative-route';
+            routeDiv.innerHTML = `
+                <div class="route-info">
+                    <span class="route-number">Route ${i + 1}</span>
+                    <span class="route-distance">${(route.summary.totalDistance / 1000).toFixed(1)} km</span>
+                    <span class="route-duration">${Math.round(route.summary.totalTime / 60)} min</span>
+                </div>
+            `;
+            alternativesDiv.appendChild(routeDiv);
+        });
+    });
+}
+
+// Notification function
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.getElementById('notification-container').appendChild(notification);
+    
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-menu')) {
+            document.querySelector('.user-dropdown').classList.add('hidden');
+        }
+    });
+    
+    // Initialize map and other components
+    initializeMap();
+    initializeRouting();
+});

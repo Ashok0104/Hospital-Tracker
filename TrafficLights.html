@@ -42,123 +42,355 @@
     <!-- Dashboard Page -->
     <div id="dashboard-page" class="dashboard-container hidden">
         <header class="main-header">
-            <div class="logo-container">
-                <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="#0066cc"/>
-                    <path d="M50 20 L35 50 L65 50 Z" fill="white"/>
-                    <path d="M50 80 L35 50 L65 50 Z" fill="white"/>
-                    <circle cx="50" cy="50" r="10" fill="white" stroke="#0066cc" stroke-width="3"/>
-                </svg>
-                <h2>Public Rescue</h2>
+            <div class="header-left">
+                <div class="logo-container">
+                    <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="#0066cc"/>
+                        <path d="M50 20 L35 50 L65 50 Z" fill="white"/>
+                        <path d="M50 80 L35 50 L65 50 Z" fill="white"/>
+                        <circle cx="50" cy="50" r="10" fill="white" stroke="#0066cc" stroke-width="3"/>
+                    </svg>
+                    <h2>Public Rescue</h2>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#" class="active" onclick="showDashboard()">Dashboard</a></li>
+                        <li><a href="#" onclick="showEmergencyHistory()">History</a></li>
+                        <li><a href="#" onclick="showSettings()">Settings</a></li>
+                        <li><a href="#" class="emergency-btn" onclick="triggerEmergencyMode()">Emergency Mode</a></li>
+                    </ul>
+                </nav>
             </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#" class="active">Dashboard</a></li>
-                    <li><a href="#" onclick="showEmergencyHistory()">History</a></li>
-                    <li><a href="#" onclick="showSettings()">Settings</a></li>
-                    <li><a href="#" class="emergency-btn" onclick="triggerEmergencyMode()">Emergency Mode</a></li>
-                </ul>
-            </nav>
+
+            <div class="header-right">
+                <div class="header-actions">
+                    <div class="search-container">
+                        <input type="text" placeholder="Search..." id="header-search">
+                        <button class="search-btn">
+                            <span class="search-icon">🔍</span>
+                        </button>
+                    </div>
+
+                    <div class="notification-center">
+                        <button class="notification-btn" onclick="toggleNotifications()">
+                            <span class="notification-icon">🔔</span>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <div class="notification-dropdown hidden">
+                            <div class="notification-header">
+                                <h3>Notifications</h3>
+                                <button onclick="markAllRead()">Mark all read</button>
+                            </div>
+                            <div class="notification-list">
+                                <div class="notification-item unread">
+                                    <div class="notification-icon emergency">🚨</div>
+                                    <div class="notification-content">
+                                        <p>New emergency reported in your area</p>
+                                        <span class="notification-time">2 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item unread">
+                                    <div class="notification-icon traffic">🚦</div>
+                                    <div class="notification-content">
+                                        <p>Traffic alert: Heavy congestion on Main St</p>
+                                        <span class="notification-time">15 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item unread">
+                                    <div class="notification-icon weather">🌦️</div>
+                                    <div class="notification-content">
+                                        <p>Weather alert: Heavy rain expected</p>
+                                        <span class="notification-time">1 hour ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-menu">
+                        <button class="user-btn" onclick="toggleUserMenu()">
+                            <div class="user-avatar">
+                                <img src="assets/images/default-avatar.png" alt="User Avatar">
+                            </div>
+                            <span class="user-name">John Doe</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="user-dropdown hidden">
+                            <div class="user-info">
+                                <img src="assets/images/default-avatar.png" alt="User Avatar">
+                                <div class="user-details">
+                                    <h4>John Doe</h4>
+                                    <p>Emergency Coordinator</p>
+                                </div>
+                            </div>
+                            <ul class="user-menu-items">
+                                <li><a href="#" onclick="showProfile()">Profile</a></li>
+                                <li><a href="#" onclick="showSettings()">Settings</a></li>
+                                <li><a href="#" onclick="showPreferences()">Preferences</a></li>
+                                <li><a href="#" onclick="showHelp()">Help & Support</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" onclick="logout()" class="logout-btn">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button class="emergency-btn" onclick="triggerEmergencyMode()">
+                        <span class="emergency-icon">🚨</span>
+                        Emergency Mode
+                    </button>
+                </div>
+            </div>
         </header>
 
         <div class="dashboard-content">
             <div class="sidebar">
-                <h2>Emergency Control Center</h2>
-                
-                <div class="input-section">
-                    <div class="input-group">
-                        <label>Current Location</label>
-                        <div class="location-group">
-                            <button id="use-current-location" onclick="useCurrentLocation()" class="location-btn">
-                                <span class="location-icon">📍</span> Get My Location
-                            </button>
-                            <div class="location-status" id="location-status">Waiting for location...</div>
+                <div class="sidebar-tabs">
+                    <button class="sidebar-tab active" onclick="showSidebarTab('emergency')">Emergency</button>
+                    <button class="sidebar-tab" onclick="showSidebarTab('settings')">Settings</button>
+                </div>
+
+                <!-- Emergency Tab -->
+                <div id="emergency-tab" class="sidebar-content active">
+                    <h2>Emergency Control Center</h2>
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>Current Location</label>
+                            <div class="location-group">
+                                <button id="use-current-location" onclick="useCurrentLocation()" class="location-btn">
+                                    <span class="location-icon">📍</span> Current Location
+                                </button>
+                                <div class="location-status" id="location-status">Waiting for location...</div>
+                            </div>
+                        </div>
+
+                        <div class="input-group search-group">
+                            <label>Search Location</label>
+                            <div class="search-container">
+                                <input type="text" id="location-search" placeholder="Search any address...">
+                                <button id="search-btn" onclick="searchLocation()">
+                                    <span class="search-icon">🔍</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Emergency Classification</label>
+                            <select id="emergency-type" required title="Select the type of emergency">
+                                <option value="accident" selected>Road Accident</option>
+                                <option value="cardiac">Cardiac Emergency</option>
+                                <option value="neuro">Neurological Emergency</option>
+                                <option value="trauma">Trauma/Injury</option>
+                                <option value="respiratory">Respiratory Distress</option>
+                                <option value="burn">Burn Emergency</option>
+                                <option value="drowning">Drowning</option>
+                                <option value="poisoning">Poisoning</option>
+                                <option value="obstetric">Obstetric Emergency</option>
+                                <option value="pediatric">Pediatric Emergency</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Priority Level</label>
+                            <div class="priority-selector">
+                                <label class="radio-container">
+                                    <input type="radio" name="priority" value="low">
+                                    <span class="radio-label">Low</span>
+                                </label>
+                                <label class="radio-container">
+                                    <input type="radio" name="priority" value="medium" checked>
+                                    <span class="radio-label">Medium</span>
+                                </label>
+                                <label class="radio-container">
+                                    <input type="radio" name="priority" value="high">
+                                    <span class="radio-label">High</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group search-group">
-                        <label>Search Location</label>
-                        <div class="search-container">
-                            <input type="text" id="location-search" placeholder="Search any address...">
-                            <button id="search-btn" onclick="searchLocation()">
-                                <span class="search-icon">🔍</span>
-                            </button>
+                    <div class="action-buttons">
+                        <button onclick="findNearestHospital()" class="dashboard-btn primary-btn">Find Nearest Hospital</button>
+                        <button onclick="dispatchEmergencyVehicle()" class="dashboard-btn success-btn">Dispatch Vehicle</button>
+                        <button onclick="resetDashboard()" class="dashboard-btn secondary-btn">Reset</button>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="quick-actions-tabs">
+                            <button class="quick-tab-btn active" onclick="showQuickActionTab('emergency')">Emergency</button>
+                            <button class="quick-tab-btn" onclick="showQuickActionTab('navigation')">Navigation</button>
+                            <button class="quick-tab-btn" onclick="showQuickActionTab('info')">Information</button>
+                        </div>
+
+                        <div class="quick-action-tabs-content">
+                            <!-- Emergency Tab -->
+                            <div id="emergency-tab" class="quick-action-tab active">
+                                <div class="action-grid">
+                                    <button onclick="findNearestHospital()" class="quick-action-btn emergency">
+                                        <span class="action-icon">🚑</span>
+                                        <span class="action-text">Nearest Hospital</span>
+                                    </button>
+                                    <button onclick="showEmergencyContacts()" class="quick-action-btn emergency">
+                                        <span class="action-icon">📞</span>
+                                        <span class="action-text">Emergency Contacts</span>
+                                    </button>
+                                    <button onclick="showFirstAidGuide()" class="quick-action-btn emergency">
+                                        <span class="action-icon">🩹</span>
+                                        <span class="action-text">First Aid Guide</span>
+                                    </button>
+                                    <button onclick="shareLocation()" class="quick-action-btn emergency">
+                                        <span class="action-icon">📍</span>
+                                        <span class="action-text">Share Location</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Tab -->
+                            <div id="navigation-tab" class="quick-action-tab">
+                                <div class="action-grid">
+                                    <button onclick="showAllHealthcareOptions()" class="quick-action-btn navigation">
+                                        <span class="action-icon">🏥</span>
+                                        <span class="action-text">All Healthcare</span>
+                                    </button>
+                                    <button onclick="toggleTrafficLayer()" class="quick-action-btn navigation" id="traffic-btn">
+                                        <span class="action-icon">🚦</span>
+                                        <span class="action-text">Live Traffic</span>
+                                    </button>
+                                    <button onclick="showAlternativeRoutes()" class="quick-action-btn navigation">
+                                        <span class="action-icon">🔄</span>
+                                        <span class="action-text">Alt Routes</span>
+                                    </button>
+                                    <button onclick="trackActiveAmbulances()" class="quick-action-btn navigation" id="track-btn">
+                                        <span class="action-icon">🚨</span>
+                                        <span class="action-text">Track Ambulance</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Information Tab -->
+                            <div id="info-tab" class="quick-action-tab">
+                                <div class="action-grid">
+                                    <button onclick="showWeatherAlerts()" class="quick-action-btn info">
+                                        <span class="action-icon">🌦️</span>
+                                        <span class="action-text">Weather Alerts</span>
+                                    </button>
+                                    <button onclick="showNearbyServices()" class="quick-action-btn info">
+                                        <span class="action-icon">🔍</span>
+                                        <span class="action-text">Nearby Services</span>
+                                    </button>
+                                    <button onclick="toggleAccessibilityOptions()" class="quick-action-btn info" id="accessibility-btn">
+                                        <span class="action-icon">♿</span>
+                                        <span class="action-text">Accessibility</span>
+                                    </button>
+                                    <button onclick="showHelpGuide()" class="quick-action-btn info">
+                                        <span class="action-icon">❓</span>
+                                        <span class="action-text">Help Guide</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label>Emergency Classification</label>
-                        <select id="emergency-type" required title="Select the type of emergency">
-                            <option value="accident" selected>Road Accident</option>
-                            <option value="cardiac">Cardiac Emergency</option>
-                            <option value="neuro">Neurological Emergency</option>
-                            <option value="trauma">Trauma/Injury</option>
-                            <option value="respiratory">Respiratory Distress</option>
-                            <option value="burn">Burn Emergency</option>
-                            <option value="drowning">Drowning</option>
-                            <option value="poisoning">Poisoning</option>
-                            <option value="obstetric">Obstetric Emergency</option>
-                            <option value="pediatric">Pediatric Emergency</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Priority Level</label>
-                        <div class="priority-selector">
-                            <label class="radio-container">
-                                <input type="radio" name="priority" value="low">
-                                <span class="radio-label">Low</span>
-                            </label>
-                            <label class="radio-container">
-                                <input type="radio" name="priority" value="medium" checked>
-                                <span class="radio-label">Medium</span>
-                            </label>
-                            <label class="radio-container">
-                                <input type="radio" name="priority" value="high">
-                                <span class="radio-label">High</span>
-                            </label>
+                    <div class="emergency-status" id="status-container">
+                        <h3>Emergency Status</h3>
+                        <div class="status-details">
+                            <div class="status-item">
+                                <span class="status-label">Current Status:</span>
+                                <span class="status-value" id="current-status">Ready</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Destination:</span>
+                                <span class="status-value" id="destination-value">Not Selected</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">ETA:</span>
+                                <span class="status-value" id="eta-value">--:--</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Distance:</span>
+                                <span class="status-value" id="distance-value">-- km</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Weather:</span>
+                                <span class="status-value" id="weather-status">☁️ Cloudy - Slight visibility reduction</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="action-buttons">
-                    <button onclick="findNearestHospital()" class="dashboard-btn primary-btn">Find Nearest Hospital</button>
-                    <button onclick="dispatchEmergencyVehicle()" class="dashboard-btn success-btn">Dispatch Vehicle</button>
-                    <button onclick="resetDashboard()" class="dashboard-btn secondary-btn">Reset</button>
-                </div>
+                <!-- Settings Tab -->
+                <div id="settings-tab" class="sidebar-content">
+                    <h2>Quick Settings</h2>
+                    <div class="quick-settings">
+                        <div class="settings-group">
+                            <h3>Map Display</h3>
+                            <div class="setting-item">
+                                <label>Map Style</label>
+                                <select id="quick-map-style">
+                                    <option value="standard">Standard</option>
+                                    <option value="satellite">Satellite</option>
+                                    <option value="terrain">Terrain</option>
+                                    <option value="hybrid">Hybrid</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label>Map Layers</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="show-traffic" checked> Traffic
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="show-transit"> Transit
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="show-bicycle"> Bicycle
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="quick-actions">
-                    <h3>Quick Actions</h3>
-                    <div class="action-grid">
-                        <button onclick="showAllHealthcareOptions()" class="quick-action-btn">All Healthcare</button>
-                        <button onclick="toggleTrafficLayer()" class="quick-action-btn" id="traffic-btn">Live Traffic</button>
-                        <button onclick="trackActiveAmbulances()" class="quick-action-btn" id="track-btn">Track Ambulance</button>
-                        <button onclick="showAlternativeRoutes()" class="quick-action-btn">Alt Routes</button>
-                    </div>
-                </div>
+                        <div class="settings-group">
+                            <h3>Navigation</h3>
+                            <div class="setting-item">
+                                <label>Voice Guidance</label>
+                                <select id="voice-guidance">
+                                    <option value="on">On</option>
+                                    <option value="off">Off</option>
+                                    <option value="alerts">Alerts Only</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label>Units</label>
+                                <select id="distance-units">
+                                    <option value="km">Kilometers</option>
+                                    <option value="mi">Miles</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="emergency-status" id="status-container">
-                    <h3>Emergency Status</h3>
-                    <div class="status-details">
-                        <div class="status-item">
-                            <span class="status-label">Current Status:</span>
-                            <span class="status-value" id="current-status">Ready</span>
+                        <div class="settings-group">
+                            <h3>Emergency Response</h3>
+                            <div class="setting-item">
+                                <label>Auto-dispatch</label>
+                                <select id="auto-dispatch">
+                                    <option value="off">Off</option>
+                                    <option value="on">On</option>
+                                    <option value="confirm">Ask for Confirmation</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label>Response Priority</label>
+                                <select id="response-priority">
+                                    <option value="nearest">Nearest Facility</option>
+                                    <option value="specialized">Specialized Care</option>
+                                    <option value="capacity">Available Capacity</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="status-item">
-                            <span class="status-label">Destination:</span>
-                            <span class="status-value" id="destination-value">Not Selected</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label">ETA:</span>
-                            <span class="status-value" id="eta-value">--:--</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label">Distance:</span>
-                            <span class="status-value" id="distance-value">-- km</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label">Weather:</span>
-                            <span class="status-value" id="weather-status">Checking...</span>
+
+                        <div class="settings-actions">
+                            <button onclick="saveQuickSettings()" class="primary-btn">Save Settings</button>
+                            <button onclick="resetQuickSettings()" class="secondary-btn">Reset to Default</button>
                         </div>
                     </div>
                 </div>
@@ -175,11 +407,113 @@
                 </div>
                 <div id="directions-panel" class="directions-panel hidden">
                     <div class="directions-header">
-                        <h3>Directions</h3>
-                        <button onclick="hideDirectionsPanel()" class="close-btn">×</button>
+                        <div class="header-top">
+                            <h3>Directions</h3>
+                            <div class="header-actions">
+                                <div id="routing-alternatives" class="routing-alternatives">
+                                    <!-- Leaflet Routing Machine alternatives will be populated here -->
+                                </div>
+                                <button onclick="hideDirectionsPanel()" class="close-btn">×</button>
+                            </div>
+                        </div>
+                        <div class="routing-controls">
+                            <div class="routing-profile">
+                                <select id="routing-profile">
+                                    <option value="car">Car</option>
+                                    <option value="bike">Bicycle</option>
+                                    <option value="foot">Walking</option>
+                                </select>
+                            </div>
+                            <div class="routing-options">
+                                <button onclick="showAlternativeRoutes()" class="alt-routes-btn">
+                                    <span class="alt-icon">🔄</span> Alt Routes
+                                </button>
+                                <button onclick="reverseRoute()" class="reverse-btn">
+                                    <span class="reverse-icon">↔️</span> Reverse
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="directions-content" id="directions-content">
-                        <!-- Directions will be added here dynamically -->
+                    <div class="directions-content">
+                        <div class="directions-inputs">
+                            <div class="input-group">
+                                <label>Starting Point</label>
+                                <div class="location-input">
+                                    <input type="text" id="start-location" placeholder="Enter starting point">
+                                    <button onclick="useCurrentLocation()" class="location-btn">
+                                        <span class="location-icon">📍</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label>Destination</label>
+                                <div class="location-input">
+                                    <input type="text" id="end-location" placeholder="Enter destination">
+                                    <button onclick="selectFromMap()" class="map-btn">
+                                        <span class="map-icon">🗺️</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="route-options">
+                                <h4>Route Options</h4>
+                                <div class="option-group">
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="avoid-tolls"> Avoid Tolls
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="avoid-highways"> Avoid Highways
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="use-green-corridor"> Use Green Corridor
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="transport-mode">
+                                <h4>Transport Mode</h4>
+                                <div class="mode-buttons">
+                                    <button class="mode-btn active" data-mode="car">
+                                        <span class="mode-icon">🚗</span> Car
+                                    </button>
+                                    <button class="mode-btn" data-mode="ambulance">
+                                        <span class="mode-icon">🚑</span> Ambulance
+                                    </button>
+                                    <button class="mode-btn" data-mode="helicopter">
+                                        <span class="mode-icon">🚁</span> Helicopter
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="route-summary">
+                                <div class="summary-item">
+                                    <span class="summary-label">Distance:</span>
+                                    <span class="summary-value" id="route-distance">-- km</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Duration:</span>
+                                    <span class="summary-value" id="route-duration">-- min</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Traffic:</span>
+                                    <span class="summary-value" id="route-traffic">Checking...</span>
+                                </div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button onclick="calculateRoute()" class="primary-btn">Calculate Route</button>
+                                <button onclick="startNavigation()" class="success-btn">Start Navigation</button>
+                                <button onclick="clearRoute()" class="secondary-btn">Clear Route</button>
+                            </div>
+                        </div>
+
+                        <div class="turn-by-turn" id="turn-by-turn">
+                            <h4>Turn-by-Turn Directions</h4>
+                            <div class="directions-list" id="directions-list">
+                                <!-- Directions will be populated here -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -290,6 +624,267 @@
 
     <!-- Notification Container -->
     <div id="notification-container" class="notification-container"></div>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="modal-container hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div id="modal-body" class="modal-body">
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeSettingsModal()">&times;</span>
+            <h2>Settings</h2>
+            <div class="settings-container">
+                <div class="settings-tabs">
+                    <button class="settings-tab-btn active" onclick="showSettingsTab('general')">General</button>
+                    <button class="settings-tab-btn" onclick="showSettingsTab('map')">Map</button>
+                    <button class="settings-tab-btn" onclick="showSettingsTab('emergency')">Emergency</button>
+                    <button class="settings-tab-btn" onclick="showSettingsTab('notifications')">Notifications</button>
+                </div>
+
+                <!-- General Settings Tab -->
+                <div id="general-settings" class="settings-tab active">
+                    <div class="settings-section">
+                        <h3>Display Settings</h3>
+                        <div class="setting-item">
+                            <label>Theme</label>
+                            <select id="theme-select">
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                                <option value="system">System Default</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Language</label>
+                            <select id="language-select">
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Font Size</label>
+                            <select id="font-size-select">
+                                <option value="small">Small</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="large">Large</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Settings Tab -->
+                <div id="map-settings" class="settings-tab">
+                    <div class="settings-section">
+                        <h3>Map Display</h3>
+                        <div class="setting-item">
+                            <label>Default Map Style</label>
+                            <select id="map-style-select">
+                                <option value="standard">Standard</option>
+                                <option value="satellite">Satellite</option>
+                                <option value="terrain">Terrain</option>
+                                <option value="hybrid">Hybrid</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Default Zoom Level</label>
+                            <select id="zoom-level-select">
+                                <option value="city">City Level</option>
+                                <option value="district">District Level</option>
+                                <option value="street">Street Level</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Map Layers</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="traffic-layer" checked> Traffic
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="transit-layer"> Transit
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="bicycle-layer"> Bicycle
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Settings Tab -->
+                <div id="emergency-settings" class="settings-tab">
+                    <div class="settings-section">
+                        <h3>Emergency Preferences</h3>
+                        <div class="setting-item">
+                            <label>Default Emergency Type</label>
+                            <select id="default-emergency-select">
+                                <option value="accident">Road Accident</option>
+                                <option value="cardiac">Cardiac Emergency</option>
+                                <option value="neuro">Neurological Emergency</option>
+                                <option value="trauma">Trauma/Injury</option>
+                                <option value="respiratory">Respiratory Distress</option>
+                                <option value="burn">Burn Emergency</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Response Priority</label>
+                            <select id="priority-select">
+                                <option value="nearest">Nearest Facility</option>
+                                <option value="specialized">Specialized Care</option>
+                                <option value="capacity">Available Capacity</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Auto Actions</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="auto-dispatch"> Auto-dispatch
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="auto-navigate"> Auto-navigate
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="auto-alert"> Auto-alert contacts
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Settings Tab -->
+                <div id="notifications-settings" class="settings-tab">
+                    <div class="settings-section">
+                        <h3>Notification Preferences</h3>
+                        <div class="setting-item">
+                            <label>Notification Types</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="notify-emergency" checked> Emergency Alerts
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="notify-updates" checked> Status Updates
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="notify-traffic"> Traffic Alerts
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="notify-weather"> Weather Alerts
+                                </label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label>Sound Alerts</label>
+                            <select id="sound-alert-select">
+                                <option value="all">All Sounds</option>
+                                <option value="emergency">Emergency Only</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Alert Volume</label>
+                            <select id="volume-select">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button onclick="saveSettings()" class="primary-btn">Save Changes</button>
+                    <button onclick="resetSettings()" class="secondary-btn">Reset to Default</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeHistoryModal()">&times;</span>
+            <h2>Emergency History</h2>
+            <div class="history-container">
+                <div class="history-filters">
+                    <div class="filter-group">
+                        <label>Time Range</label>
+                        <select id="time-range-select">
+                            <option value="24h">Last 24 Hours</option>
+                            <option value="7d">Last 7 Days</option>
+                            <option value="30d">Last 30 Days</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Emergency Type</label>
+                        <select id="emergency-type-filter">
+                            <option value="all">All Types</option>
+                            <option value="accident">Road Accident</option>
+                            <option value="cardiac">Cardiac Emergency</option>
+                            <option value="neuro">Neurological Emergency</option>
+                            <option value="trauma">Trauma/Injury</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select id="status-filter">
+                            <option value="all">All Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="history-list" id="history-list">
+                    <!-- History items will be populated dynamically -->
+                    <div class="history-item">
+                        <div class="history-item-header">
+                            <span class="emergency-type">Road Accident</span>
+                            <span class="emergency-time">2024-03-20 14:30</span>
+                        </div>
+                        <div class="history-item-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Location:</span>
+                                <span class="detail-value">123 Main Street, City</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Destination:</span>
+                                <span class="detail-value">City General Hospital</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value status-completed">Completed</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Response Time:</span>
+                                <span class="detail-value">8 minutes</span>
+                            </div>
+                        </div>
+                        <div class="history-item-actions">
+                            <button onclick="viewHistoryDetails(1)" class="action-btn">View Details</button>
+                            <button onclick="recreateEmergency(1)" class="action-btn">Recreate</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="history-pagination">
+                    <button class="pagination-btn" onclick="previousPage()">Previous</button>
+                    <span class="page-info">Page 1 of 5</span>
+                    <button class="pagination-btn" onclick="nextPage()">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Leaflet JS - Free Map API -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

@@ -467,41 +467,166 @@ select:focus {
 
 .quick-actions {
     margin-bottom: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    border: 1px solid var(--light-gray);
 }
 
 .quick-actions h3 {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    color: var(--dark-color);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 2px solid rgba(0, 102, 204, 0.1);
+    padding-bottom: 8px;
+}
+
+/* Quick Action Tabs */
+.quick-actions-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.quick-tab-btn {
+    flex: 1;
+    padding: 8px 5px;
+    background: none;
+    border: none;
+    color: var(--gray-color);
+    font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    text-align: center;
+}
+
+.quick-tab-btn:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.quick-tab-btn.active {
+    color: var(--primary-color);
+}
+
+.quick-tab-btn.active:after {
+    width: 100%;
+}
+
+.quick-action-tab {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.quick-action-tab.active {
+    display: block;
 }
 
 .action-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 12px;
 }
 
 .quick-action-btn {
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
     background-color: #f8f9fa;
     border: 1px solid var(--light-gray);
-    border-radius: var(--border-radius);
+    border-radius: 10px;
     color: var(--dark-color);
     font-size: 13px;
     text-align: center;
     font-weight: 500;
-    transition: var(--transition);
+    transition: all 0.3s ease;
+    height: 80px;
+}
+
+.action-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.action-text {
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .quick-action-btn:hover {
-    background-color: #e9ecef;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .quick-action-btn.active {
     background-color: rgba(0, 102, 204, 0.1);
     border-color: var(--primary-light);
     color: var(--primary-color);
+}
+
+/* Emergency tab buttons */
+.quick-action-btn.emergency {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: rgba(231, 76, 60, 0.3);
+}
+
+.quick-action-btn.emergency:hover {
+    background-color: rgba(231, 76, 60, 0.2);
+}
+
+.quick-action-btn.emergency.active {
+    background-color: rgba(231, 76, 60, 0.3);
+    border-color: rgba(231, 76, 60, 0.5);
+}
+
+/* Navigation tab buttons */
+.quick-action-btn.navigation {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-color: rgba(52, 152, 219, 0.3);
+}
+
+.quick-action-btn.navigation:hover {
+    background-color: rgba(52, 152, 219, 0.2);
+}
+
+.quick-action-btn.navigation.active {
+    background-color: rgba(52, 152, 219, 0.3);
+    border-color: rgba(52, 152, 219, 0.5);
+}
+
+/* Info tab buttons */
+.quick-action-btn.info {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-color: rgba(46, 204, 113, 0.3);
+}
+
+.quick-action-btn.info:hover {
+    background-color: rgba(46, 204, 113, 0.2);
+}
+
+.quick-action-btn.info.active {
+    background-color: rgba(46, 204, 113, 0.3);
+    border-color: rgba(46, 204, 113, 0.5);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .emergency-status {
@@ -709,511 +834,220 @@ select:focus {
 }
 
 /* Modal Styles */
-.modal {
-    display: none;
+.modal-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 100;
-    overflow-y: auto;
-    padding: 50px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-container.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .modal-content {
     background-color: white;
-    margin: 0 auto;
-    max-width: 800px;
-    border-radius: 8px;
-    box-shadow: var(--box-shadow);
-    position: relative;
-    padding: 25px;
-    max-height: 90vh;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
     overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
 }
 
-.modal h2 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-    font-weight: 600;
-    text-align: center;
+.modal-container.hidden .modal-content {
+    transform: translateY(-20px);
 }
 
-.healthcare-tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--light-gray);
-}
-
-.tab-btn {
-    padding: 10px 20px;
-    background: none;
-    border: none;
-    color: var(--gray-color);
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    position: relative;
-}
-
-.tab-btn:after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 3px;
-    background-color: var(--primary-color);
-    bottom: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: var(--transition);
-}
-
-.tab-btn.active {
-    color: var(--primary-color);
-}
-
-.tab-btn.active:after {
-    width: 100%;
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.healthcare-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 15px;
-}
-
-.healthcare-item {
-    background-color: #f8f9fa;
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.healthcare-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-}
-
-.healthcare-item-image {
-    height: 120px;
-    background-size: cover;
-    background-position: center;
-}
-
-.healthcare-item-content {
-    padding: 15px;
-}
-
-.healthcare-item-name {
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: var(--dark-color);
-    font-size: 1rem;
-}
-
-.healthcare-item-type {
-    font-size: 0.8rem;
-    color: var(--primary-color);
-    background-color: rgba(0, 102, 204, 0.1);
-    padding: 3px 8px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 8px;
-}
-
-.healthcare-item-distance, .healthcare-item-status {
-    font-size: 0.85rem;
-    color: var(--gray-color);
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-}
-
-.healthcare-item-status.open {
-    color: var(--success-color);
-}
-
-.healthcare-item-status.busy {
-    color: var(--warning-color);
-}
-
-.healthcare-item-status.closed {
-    color: var(--danger-color);
-}
-
-/* Facility Details Modal Styles */
-.facility-details-content {
-    background-color: white;
-    margin: 0 auto;
-    max-width: 600px;
-    border-radius: 8px;
-    box-shadow: var(--box-shadow);
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.facility-header {
-    background-color: var(--primary-color);
-    color: white;
+.modal-header {
     padding: 20px;
+    border-bottom: 1px solid var(--light-gray);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.facility-header h2 {
+.modal-header h2 {
     margin: 0;
-    font-size: 1.6rem;
-    font-weight: 600;
-}
-
-.facility-type {
-    background-color: white;
-    color: var(--primary-color);
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.facility-image {
-    height: 200px;
-    background-size: cover;
-    background-position: center;
-}
-
-.facility-actions {
-    padding: 15px;
-    display: flex;
-    gap: 10px;
-}
-
-.facility-actions button {
-    flex: 1;
-}
-
-.facility-details-grid {
-    padding: 15px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.facility-detail-item {
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: var(--border-radius);
-}
-
-.detail-label {
-    font-size: 0.8rem;
-    color: var(--gray-color);
-    margin-bottom: 5px;
-}
-
-.facility-services {
-    padding: 15px;
-}
-
-.facility-services h3 {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
+    font-size: 1.4rem;
     color: var(--dark-color);
 }
 
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--gray-color);
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background-color: var(--light-gray);
+    color: var(--dark-color);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* Emergency Contacts Modal */
+.emergency-contacts-list {
+    display: grid;
+    gap: 15px;
+}
+
+.contact-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+}
+
+.contact-name {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.contact-number {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* First Aid Guide Modal */
+.first-aid-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.first-aid-step {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+/* Nearby Services Modal */
 .services-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 15px;
 }
 
 .service-item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 8px 10px;
+    padding: 15px;
     background-color: #f8f9fa;
-    border-radius: var(--border-radius);
-    font-size: 0.9rem;
-}
-
-.service-icon {
-    margin-right: 8px;
-    color: var(--primary-color);
-}
-
-/* Traffic Control Modal Styles */
-.traffic-light-container {
-    margin: 20px 0;
-    overflow-x: auto;
-    padding: 10px;
-}
-
-.traffic-light-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    min-width: 700px;
-}
-
-.traffic-light {
-    padding: 12px;
-    background-color: #f8f9fa;
-    border-radius: var(--border-radius);
+    border-radius: 8px;
     border: 1px solid var(--light-gray);
-    text-align: center;
-    cursor: pointer;
-    transition: var(--transition);
 }
 
-.traffic-light:hover {
-    background-color: #e9ecef;
-}
-
-.traffic-light.red {
-    border-color: var(--danger-color);
-    background-color: rgba(231, 76, 60, 0.1);
-}
-
-.traffic-light.yellow {
-    border-color: var(--warning-color);
-    background-color: rgba(243, 156, 18, 0.1);
-}
-
-.traffic-light.green {
-    border-color: var(--success-color);
-    background-color: rgba(46, 204, 113, 0.1);
-}
-
-.traffic-light-id {
-    font-size: 0.8rem;
-    color: var(--gray-color);
-    margin-bottom: 5px;
-}
-
-.traffic-light-status {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    margin: 8px auto;
-}
-
-.traffic-light.red .traffic-light-status {
-    background-color: var(--danger-color);
-}
-
-.traffic-light.yellow .traffic-light-status {
-    background-color: var(--warning-color);
-}
-
-.traffic-light.green .traffic-light-status {
-    background-color: var(--success-color);
-}
-
-.traffic-light-location {
-    font-size: 0.9rem;
-    font-weight: 500;
+.service-name {
+    font-weight: 600;
     color: var(--dark-color);
 }
 
-.modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.corridor-btn {
-    flex: 1;
-    background-color: var(--success-color);
-    color: white;
-    padding: 12px;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-}
-
-.override-btn {
-    flex: 1;
-    background-color: var(--warning-color);
-    color: white;
-    padding: 12px;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-}
-
-.reset-btn {
-    flex: 1;
-    background-color: var(--gray-color);
-    color: white;
-    padding: 12px;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-}
-
-/* Loading Overlay Styles */
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    transition: all 0.3s ease;
-}
-
-.loading-overlay.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.spinner {
-    width: 60px;
-    height: 60px;
-    border: 6px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    border-top-color: #3498db;
-    border-left-color: #3498db;
-    animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-    margin-bottom: 25px;
-    box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.loading-overlay p {
-    color: white;
-    font-size: 20px;
-    font-weight: 500;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    background-color: rgba(52, 152, 219, 0.2);
-    padding: 10px 20px;
-    border-radius: 30px;
-    max-width: 80%;
-    text-align: center;
-    animation: pulse 2s infinite;
-}
-
-/* Notification Styles */
-.notification-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 350px;
-}
-
-.notification {
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    backdrop-filter: blur(5px);
-    border: none;
-    display: flex;
-    align-items: center;
-    animation: slide-in 0.3s ease-out forwards;
-    opacity: 0;
-    transform: translateX(100%);
-}
-
-@keyframes slide-in {
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slide-out {
-    to {
-        transform: translateX(120%);
-        opacity: 0;
-    }
-}
-
-.notification.slide-out {
-    animation: slide-out 0.3s ease-out forwards;
-}
-
-.notification-icon {
-    font-size: 24px;
-    margin-right: 12px;
-}
-
-.notification-content {
-    flex: 1;
-}
-
-.notification-title {
-    font-weight: 600;
-    margin-bottom: 3px;
-    font-size: 0.95rem;
-}
-
-.notification-message {
-    font-size: 0.85rem;
-    color: var(--gray-color);
-}
-
-.notification.success {
-    border-left: 4px solid var(--success-color);
-    background: linear-gradient(to right, rgba(46, 204, 113, 0.1), white);
-}
-
-.notification.success .notification-icon {
-    color: var(--success-color);
-}
-
-.notification.warning {
-    border-left: 4px solid var(--warning-color);
-    background: linear-gradient(to right, rgba(243, 156, 18, 0.1), white);
-}
-
-.notification.warning .notification-icon {
-    color: var(--warning-color);
-}
-
-.notification.error {
-    border-left: 4px solid var(--danger-color);
-    background: linear-gradient(to right, rgba(231, 76, 60, 0.1), white);
-}
-
-.notification.error .notification-icon {
-    color: var(--danger-color);
-}
-
-.notification.info {
-    border-left: 4px solid var(--primary-color);
-    background: linear-gradient(to right, rgba(52, 152, 219, 0.1), white);
-}
-
-.notification.info .notification-icon {
+.service-distance {
     color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Help Guide Modal */
+.help-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.help-section {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+}
+
+.help-section h3 {
+    margin: 0 0 10px 0;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.help-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.help-section li {
+    margin-bottom: 8px;
+    color: var(--dark-color);
+}
+
+/* Weather Alerts Modal */
+.weather-alert {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+    text-align: center;
+}
+
+.weather-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.weather-condition {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 10px;
+}
+
+.weather-impact {
+    color: var(--gray-color);
+    line-height: 1.5;
 }
 
 /* Responsive Styles */
@@ -1760,4 +1594,713 @@ select:focus {
 .leaflet-control-zoom a:hover {
     background: #f8f9fa !important;
     transform: scale(1.1);
+}
+
+/* Healthcare Options Modal */
+#healthcare-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 50px 20px;
+}
+
+#healthcare-modal .modal-content {
+    background-color: white;
+    margin: 0 auto;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    position: relative;
+    padding: 25px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#healthcare-modal h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.healthcare-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    color: var(--gray-color);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.tab-btn:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: var(--transition);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+}
+
+.tab-btn.active:after {
+    width: 100%;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Traffic Control Modal */
+#traffic-control-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 50px 20px;
+}
+
+#traffic-control-modal .modal-content {
+    background-color: white;
+    margin: 0 auto;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    position: relative;
+    padding: 25px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#traffic-control-modal h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.traffic-light-container {
+    margin: 20px 0;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.traffic-light-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    min-width: 700px;
+}
+
+.traffic-light {
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--light-gray);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.traffic-light:hover {
+    background-color: #e9ecef;
+}
+
+.traffic-light.red {
+    border-color: var(--danger-color);
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.traffic-light.yellow {
+    border-color: var(--warning-color);
+    background-color: rgba(243, 156, 18, 0.1);
+}
+
+.traffic-light.green {
+    border-color: var(--success-color);
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+.traffic-light-id {
+    font-size: 0.8rem;
+    color: var(--gray-color);
+    margin-bottom: 5px;
+}
+
+.traffic-light-status {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 8px auto;
+}
+
+.traffic-light.red .traffic-light-status {
+    background-color: var(--danger-color);
+}
+
+.traffic-light.yellow .traffic-light-status {
+    background-color: var(--warning-color);
+}
+
+.traffic-light.green .traffic-light-status {
+    background-color: var(--success-color);
+}
+
+.traffic-light-location {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.corridor-btn {
+    flex: 1;
+    background-color: var(--success-color);
+    color: white;
+    padding: 12px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+}
+
+.override-btn {
+    flex: 1;
+    background-color: var(--warning-color);
+    color: white;
+    padding: 12px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+}
+
+.reset-btn {
+    flex: 1;
+    background-color: var(--gray-color);
+    color: white;
+    padding: 12px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+}
+
+/* Close button for modals */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--gray-color);
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    color: var(--dark-color);
+    transform: scale(1.1);
+}
+
+/* Facility Details Modal */
+#facility-details-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 50px 20px;
+}
+
+#facility-details-modal .modal-content {
+    background-color: white;
+    margin: 0 auto;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    position: relative;
+    padding: 25px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.facility-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.facility-details-header h2 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.facility-details-content {
+    display: grid;
+    gap: 20px;
+}
+
+.facility-info-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+}
+
+.facility-info-section h3 {
+    color: var(--dark-color);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.facility-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.facility-info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.facility-info-label {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+    margin-bottom: 5px;
+}
+
+.facility-info-value {
+    font-size: 1rem;
+    color: var(--dark-color);
+    font-weight: 500;
+}
+
+.facility-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.facility-action-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.navigate-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.navigate-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+.call-btn {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.call-btn:hover {
+    background-color: #27ae60;
+}
+
+.services-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.service-item {
+    background-color: white;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--light-gray);
+    font-size: 0.9rem;
+    color: var(--dark-color);
+}
+
+/* Share Location Modal */
+.share-success-message {
+    text-align: center;
+    padding: 20px;
+}
+
+.share-success-message i {
+    font-size: 48px;
+    color: var(--success-color);
+    margin-bottom: 15px;
+}
+
+.share-success-message p {
+    font-size: 1.1rem;
+    color: var(--dark-color);
+    margin-bottom: 20px;
+}
+
+.location-url-preview {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+    margin-top: 15px;
+    word-break: break-all;
+}
+
+.location-url-preview code {
+    font-family: monospace;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+/* Notification Modal Styles */
+.notification-modal {
+    max-width: 400px !important;
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification-modal .modal-header {
+    padding: 15px 20px;
+    border-bottom: none;
+}
+
+.notification-modal .modal-header h2 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.notification-modal .modal-body {
+    padding: 20px;
+}
+
+.notification-message {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.notification-message i {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.notification-message p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--dark-color);
+}
+
+/* Notification Types */
+.notification-modal.success i {
+    color: var(--success-color);
+}
+
+.notification-modal.error i {
+    color: var(--danger-color);
+}
+
+.notification-modal.warning i {
+    color: var(--warning-color);
+}
+
+.notification-modal.info i {
+    color: var(--primary-color);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Remove old notification styles */
+.notification-container,
+.notification,
+.notification-header,
+.notification-close {
+    display: none;
+}
+
+/* Toast Notification Styles */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 350px;
+}
+
+.toast {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideInRight 0.3s ease-out;
+    border-left: 4px solid var(--primary-color);
+}
+
+.toast.success {
+    border-left-color: var(--success-color);
+}
+
+.toast.error {
+    border-left-color: var(--danger-color);
+}
+
+.toast.warning {
+    border-left-color: var(--warning-color);
+}
+
+.toast.info {
+    border-left-color: var(--primary-color);
+}
+
+.toast-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.toast.success .toast-icon {
+    color: var(--success-color);
+}
+
+.toast.error .toast-icon {
+    color: var(--danger-color);
+}
+
+.toast.warning .toast-icon {
+    color: var(--warning-color);
+}
+
+.toast.info .toast-icon {
+    color: var(--primary-color);
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+.toast-message {
+    color: var(--gray-color);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: var(--gray-color);
+    font-size: 18px;
+    padding: 4px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.toast.hiding {
+    animation: slideOutRight 0.3s ease-out forwards;
+}
+
+/* Healthcare Items */
+.healthcare-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.healthcare-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.healthcare-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.healthcare-item-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.healthcare-type {
+    background: #e74c3c;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+.healthcare-item-details {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.healthcare-item-details p {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.healthcare-item-details i {
+    color: #e74c3c;
+    width: 16px;
+}
+
+/* Healthcare Modal Tabs */
+.healthcare-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.healthcare-tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #f8f9fa;
+    color: #666;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.healthcare-tab-btn:hover {
+    background: #e9ecef;
+}
+
+.healthcare-tab-btn.active {
+    background: #e74c3c;
+    color: white;
+}
+
+.healthcare-tab-content {
+    display: none;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.healthcare-tab-content.active {
+    display: block;
+}
+
+/* Scrollbar Styles */
+.healthcare-tab-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.healthcare-tab-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.healthcare-tab-content::-webkit-scrollbar-thumb {
+    background: #e74c3c;
+    border-radius: 4px;
+}
+
+.healthcare-tab-content::-webkit-scrollbar-thumb:hover {
+    background: #c0392b;
 }
