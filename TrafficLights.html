@@ -42,355 +42,190 @@
     <!-- Dashboard Page -->
     <div id="dashboard-page" class="dashboard-container hidden">
         <header class="main-header">
-            <div class="header-left">
-                <div class="logo-container">
-                    <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="50" cy="50" r="45" fill="#0066cc"/>
-                        <path d="M50 20 L35 50 L65 50 Z" fill="white"/>
-                        <path d="M50 80 L35 50 L65 50 Z" fill="white"/>
-                        <circle cx="50" cy="50" r="10" fill="white" stroke="#0066cc" stroke-width="3"/>
-                    </svg>
-                    <h2>Public Rescue</h2>
-                </div>
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="#" class="active" onclick="showDashboard()">Dashboard</a></li>
-                        <li><a href="#" onclick="showEmergencyHistory()">History</a></li>
-                        <li><a href="#" onclick="showSettings()">Settings</a></li>
-                        <li><a href="#" class="emergency-btn" onclick="triggerEmergencyMode()">Emergency Mode</a></li>
-                    </ul>
-                </nav>
+            <div class="logo-container">
+                <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="#0066cc"/>
+                    <path d="M50 20 L35 50 L65 50 Z" fill="white"/>
+                    <path d="M50 80 L35 50 L65 50 Z" fill="white"/>
+                    <circle cx="50" cy="50" r="10" fill="white" stroke="#0066cc" stroke-width="3"/>
+                </svg>
+                <h2>Public Rescue</h2>
             </div>
-
-            <div class="header-right">
-                <div class="header-actions">
-                    <div class="search-container">
-                        <input type="text" placeholder="Search..." id="header-search">
-                        <button class="search-btn">
-                            <span class="search-icon">🔍</span>
-                        </button>
-                    </div>
-
-                    <div class="notification-center">
-                        <button class="notification-btn" onclick="toggleNotifications()">
-                            <span class="notification-icon">🔔</span>
-                            <span class="notification-badge">3</span>
-                        </button>
-                        <div class="notification-dropdown hidden">
-                            <div class="notification-header">
-                                <h3>Notifications</h3>
-                                <button onclick="markAllRead()">Mark all read</button>
-                            </div>
-                            <div class="notification-list">
-                                <div class="notification-item unread">
-                                    <div class="notification-icon emergency">🚨</div>
-                                    <div class="notification-content">
-                                        <p>New emergency reported in your area</p>
-                                        <span class="notification-time">2 minutes ago</span>
-                                    </div>
-                                </div>
-                                <div class="notification-item unread">
-                                    <div class="notification-icon traffic">🚦</div>
-                                    <div class="notification-content">
-                                        <p>Traffic alert: Heavy congestion on Main St</p>
-                                        <span class="notification-time">15 minutes ago</span>
-                                    </div>
-                                </div>
-                                <div class="notification-item unread">
-                                    <div class="notification-icon weather">🌦️</div>
-                                    <div class="notification-content">
-                                        <p>Weather alert: Heavy rain expected</p>
-                                        <span class="notification-time">1 hour ago</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="user-menu">
-                        <button class="user-btn" onclick="toggleUserMenu()">
-                            <div class="user-avatar">
-                                <img src="assets/images/default-avatar.png" alt="User Avatar">
-                            </div>
-                            <span class="user-name">John Doe</span>
-                            <span class="dropdown-arrow">▼</span>
-                        </button>
-                        <div class="user-dropdown hidden">
-                            <div class="user-info">
-                                <img src="assets/images/default-avatar.png" alt="User Avatar">
-                                <div class="user-details">
-                                    <h4>John Doe</h4>
-                                    <p>Emergency Coordinator</p>
-                                </div>
-                            </div>
-                            <ul class="user-menu-items">
-                                <li><a href="#" onclick="showProfile()">Profile</a></li>
-                                <li><a href="#" onclick="showSettings()">Settings</a></li>
-                                <li><a href="#" onclick="showPreferences()">Preferences</a></li>
-                                <li><a href="#" onclick="showHelp()">Help & Support</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#" onclick="logout()" class="logout-btn">Logout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <button class="emergency-btn" onclick="triggerEmergencyMode()">
-                        <span class="emergency-icon">🚨</span>
-                        Emergency Mode
-                    </button>
-                </div>
-            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="#" onclick="showEmergencyHistory()">History</a></li>
+                    <li><a href="#" onclick="showSettings()">Settings</a></li>
+                    <li><a href="#" class="emergency-btn" onclick="triggerEmergencyMode()">Emergency Mode</a></li>
+                </ul>
+            </nav>
         </header>
 
         <div class="dashboard-content">
             <div class="sidebar">
-                <div class="sidebar-tabs">
-                    <button class="sidebar-tab active" onclick="showSidebarTab('emergency')">Emergency</button>
-                    <button class="sidebar-tab" onclick="showSidebarTab('settings')">Settings</button>
+                <h2>Emergency Control Center</h2>
+
+                <div class="input-section">
+                    <div class="input-group">
+                        <label>Current Location</label>
+                        <div class="location-group">
+                            <button id="use-current-location" onclick="useCurrentLocation()" class="location-btn">
+                                <span class="location-icon">Current Location</span>
+                            </button>
+                            <div class="location-status" id="location-status">Waiting for location...</div>
+                        </div>
+                    </div>
+
+                    <div class="input-group search-group">
+                        <label>Search Location</label>
+                        <div class="search-container">
+                            <input type="text" id="location-search" placeholder="Search any address...">
+                            <button id="search-btn" onclick="searchLocation()">
+                                <span class="search-icon">🔍</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Emergency Classification</label>
+                        <select id="emergency-type" required title="Select the type of emergency">
+                            <option value="accident" selected>Road Accident</option>
+                            <option value="cardiac">Cardiac Emergency</option>
+                            <option value="neuro">Neurological Emergency</option>
+                            <option value="trauma">Trauma/Injury</option>
+                            <option value="respiratory">Respiratory Distress</option>
+                            <option value="burn">Burn Emergency</option>
+                            <option value="drowning">Drowning</option>
+                            <option value="poisoning">Poisoning</option>
+                            <option value="obstetric">Obstetric Emergency</option>
+                            <option value="pediatric">Pediatric Emergency</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Priority Level</label>
+                        <div class="priority-selector">
+                            <label class="radio-container">
+                                <input type="radio" name="priority" value="low">
+                                <span class="radio-label">Low</span>
+                            </label>
+                            <label class="radio-container">
+                                <input type="radio" name="priority" value="medium" checked>
+                                <span class="radio-label">Medium</span>
+                            </label>
+                            <label class="radio-container">
+                                <input type="radio" name="priority" value="high">
+                                <span class="radio-label">High</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Emergency Tab -->
-                <div id="emergency-tab" class="sidebar-content active">
-                    <h2>Emergency Control Center</h2>
-                    <div class="input-section">
-                        <div class="input-group">
-                            <label>Current Location</label>
-                            <div class="location-group">
-                                <button id="use-current-location" onclick="useCurrentLocation()" class="location-btn">
-                                    <span class="location-icon">📍</span> Current Location
+                <div class="action-buttons">
+                    <button onclick="findNearestHospital()" class="dashboard-btn primary-btn">Find Nearest Hospital</button>
+                    <button onclick="dispatchEmergencyVehicle()" class="dashboard-btn success-btn">Dispatch Vehicle</button>
+                    <button onclick="resetDashboard()" class="dashboard-btn secondary-btn">Reset</button>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions-tabs">
+                        <button class="quick-tab-btn active" onclick="showQuickActionTab('emergency')">Emergency</button>
+                        <button class="quick-tab-btn" onclick="showQuickActionTab('navigation')">Navigation</button>
+                        <button class="quick-tab-btn" onclick="showQuickActionTab('info')">Information</button>
+                    </div>
+
+                    <div class="quick-action-tabs-content">
+                        <!-- Emergency Tab -->
+                        <div id="emergency-tab" class="quick-action-tab active">
+                            <div class="action-grid">
+                                <button onclick="findNearestHospital()" class="quick-action-btn emergency">
+                                    <span class="action-icon">🚑</span>
+                                    <span class="action-text">Nearest Hospital</span>
                                 </button>
-                                <div class="location-status" id="location-status">Waiting for location...</div>
-                            </div>
-                        </div>
-
-                        <div class="input-group search-group">
-                            <label>Search Location</label>
-                            <div class="search-container">
-                                <input type="text" id="location-search" placeholder="Search any address...">
-                                <button id="search-btn" onclick="searchLocation()">
-                                    <span class="search-icon">🔍</span>
+                                <button onclick="showEmergencyContacts()" class="quick-action-btn emergency">
+                                    <span class="action-icon">📞</span>
+                                    <span class="action-text">Emergency Contacts</span>
+                                </button>
+                                <button onclick="showFirstAidGuide()" class="quick-action-btn emergency">
+                                    <span class="action-icon">🩹</span>
+                                    <span class="action-text">First Aid Guide</span>
+                                </button>
+                                <button onclick="shareLocation()" class="quick-action-btn emergency">
+                                    <span class="action-icon">📍</span>
+                                    <span class="action-text">Share Location</span>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="input-group">
-                            <label>Emergency Classification</label>
-                            <select id="emergency-type" required title="Select the type of emergency">
-                                <option value="accident" selected>Road Accident</option>
-                                <option value="cardiac">Cardiac Emergency</option>
-                                <option value="neuro">Neurological Emergency</option>
-                                <option value="trauma">Trauma/Injury</option>
-                                <option value="respiratory">Respiratory Distress</option>
-                                <option value="burn">Burn Emergency</option>
-                                <option value="drowning">Drowning</option>
-                                <option value="poisoning">Poisoning</option>
-                                <option value="obstetric">Obstetric Emergency</option>
-                                <option value="pediatric">Pediatric Emergency</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label>Priority Level</label>
-                            <div class="priority-selector">
-                                <label class="radio-container">
-                                    <input type="radio" name="priority" value="low">
-                                    <span class="radio-label">Low</span>
-                                </label>
-                                <label class="radio-container">
-                                    <input type="radio" name="priority" value="medium" checked>
-                                    <span class="radio-label">Medium</span>
-                                </label>
-                                <label class="radio-container">
-                                    <input type="radio" name="priority" value="high">
-                                    <span class="radio-label">High</span>
-                                </label>
+                        <!-- Navigation Tab -->
+                        <div id="navigation-tab" class="quick-action-tab">
+                            <div class="action-grid">
+                                <button onclick="showAllHealthcareOptions()" class="quick-action-btn navigation">
+                                    <span class="action-icon">🏥</span>
+                                    <span class="action-text">All Healthcare</span>
+                                </button>
+                                <button onclick="toggleTrafficLayer()" class="quick-action-btn navigation" id="traffic-btn">
+                                    <span class="action-icon">🚦</span>
+                                    <span class="action-text">Live Traffic</span>
+                                </button>
+                                <button onclick="showAlternativeRoutes()" class="quick-action-btn navigation">
+                                    <span class="action-icon">🔄</span>
+                                    <span class="action-text">Alt Routes</span>
+                                </button>
+                                <button onclick="trackActiveAmbulances()" class="quick-action-btn navigation" id="track-btn">
+                                    <span class="action-icon">🚨</span>
+                                    <span class="action-text">Track Ambulance</span>
+                                </button>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="action-buttons">
-                        <button onclick="findNearestHospital()" class="dashboard-btn primary-btn">Find Nearest Hospital</button>
-                        <button onclick="dispatchEmergencyVehicle()" class="dashboard-btn success-btn">Dispatch Vehicle</button>
-                        <button onclick="resetDashboard()" class="dashboard-btn secondary-btn">Reset</button>
-                    </div>
-
-                    <div class="quick-actions">
-                        <h3>Quick Actions</h3>
-                        <div class="quick-actions-tabs">
-                            <button class="quick-tab-btn active" onclick="showQuickActionTab('emergency')">Emergency</button>
-                            <button class="quick-tab-btn" onclick="showQuickActionTab('navigation')">Navigation</button>
-                            <button class="quick-tab-btn" onclick="showQuickActionTab('info')">Information</button>
-                        </div>
-
-                        <div class="quick-action-tabs-content">
-                            <!-- Emergency Tab -->
-                            <div id="emergency-tab" class="quick-action-tab active">
-                                <div class="action-grid">
-                                    <button onclick="findNearestHospital()" class="quick-action-btn emergency">
-                                        <span class="action-icon">🚑</span>
-                                        <span class="action-text">Nearest Hospital</span>
-                                    </button>
-                                    <button onclick="showEmergencyContacts()" class="quick-action-btn emergency">
-                                        <span class="action-icon">📞</span>
-                                        <span class="action-text">Emergency Contacts</span>
-                                    </button>
-                                    <button onclick="showFirstAidGuide()" class="quick-action-btn emergency">
-                                        <span class="action-icon">🩹</span>
-                                        <span class="action-text">First Aid Guide</span>
-                                    </button>
-                                    <button onclick="shareLocation()" class="quick-action-btn emergency">
-                                        <span class="action-icon">📍</span>
-                                        <span class="action-text">Share Location</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Navigation Tab -->
-                            <div id="navigation-tab" class="quick-action-tab">
-                                <div class="action-grid">
-                                    <button onclick="showAllHealthcareOptions()" class="quick-action-btn navigation">
-                                        <span class="action-icon">🏥</span>
-                                        <span class="action-text">All Healthcare</span>
-                                    </button>
-                                    <button onclick="toggleTrafficLayer()" class="quick-action-btn navigation" id="traffic-btn">
-                                        <span class="action-icon">🚦</span>
-                                        <span class="action-text">Live Traffic</span>
-                                    </button>
-                                    <button onclick="showAlternativeRoutes()" class="quick-action-btn navigation">
-                                        <span class="action-icon">🔄</span>
-                                        <span class="action-text">Alt Routes</span>
-                                    </button>
-                                    <button onclick="trackActiveAmbulances()" class="quick-action-btn navigation" id="track-btn">
-                                        <span class="action-icon">🚨</span>
-                                        <span class="action-text">Track Ambulance</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Information Tab -->
-                            <div id="info-tab" class="quick-action-tab">
-                                <div class="action-grid">
-                                    <button onclick="showWeatherAlerts()" class="quick-action-btn info">
-                                        <span class="action-icon">🌦️</span>
-                                        <span class="action-text">Weather Alerts</span>
-                                    </button>
-                                    <button onclick="showNearbyServices()" class="quick-action-btn info">
-                                        <span class="action-icon">🔍</span>
-                                        <span class="action-text">Nearby Services</span>
-                                    </button>
-                                    <button onclick="toggleAccessibilityOptions()" class="quick-action-btn info" id="accessibility-btn">
-                                        <span class="action-icon">♿</span>
-                                        <span class="action-text">Accessibility</span>
-                                    </button>
-                                    <button onclick="showHelpGuide()" class="quick-action-btn info">
-                                        <span class="action-icon">❓</span>
-                                        <span class="action-text">Help Guide</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="emergency-status" id="status-container">
-                        <h3>Emergency Status</h3>
-                        <div class="status-details">
-                            <div class="status-item">
-                                <span class="status-label">Current Status:</span>
-                                <span class="status-value" id="current-status">Ready</span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">Destination:</span>
-                                <span class="status-value" id="destination-value">Not Selected</span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">ETA:</span>
-                                <span class="status-value" id="eta-value">--:--</span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">Distance:</span>
-                                <span class="status-value" id="distance-value">-- km</span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">Weather:</span>
-                                <span class="status-value" id="weather-status">☁️ Cloudy - Slight visibility reduction</span>
+                        <!-- Information Tab -->
+                        <div id="info-tab" class="quick-action-tab">
+                            <div class="action-grid">
+                                <button onclick="showWeatherAlerts()" class="quick-action-btn info">
+                                    <span class="action-icon">🌦️</span>
+                                    <span class="action-text">Weather Alerts</span>
+                                </button>
+                                <button onclick="showNearbyServices()" class="quick-action-btn info">
+                                    <span class="action-icon">🔍</span>
+                                    <span class="action-text">Nearby Services</span>
+                                </button>
+                                <button onclick="toggleAccessibilityOptions()" class="quick-action-btn info" id="accessibility-btn">
+                                    <span class="action-icon">♿</span>
+                                    <span class="action-text">Accessibility</span>
+                                </button>
+                                <button onclick="showHelpGuide()" class="quick-action-btn info">
+                                    <span class="action-icon">❓</span>
+                                    <span class="action-text">Help Guide</span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Settings Tab -->
-                <div id="settings-tab" class="sidebar-content">
-                    <h2>Quick Settings</h2>
-                    <div class="quick-settings">
-                        <div class="settings-group">
-                            <h3>Map Display</h3>
-                            <div class="setting-item">
-                                <label>Map Style</label>
-                                <select id="quick-map-style">
-                                    <option value="standard">Standard</option>
-                                    <option value="satellite">Satellite</option>
-                                    <option value="terrain">Terrain</option>
-                                    <option value="hybrid">Hybrid</option>
-                                </select>
-                            </div>
-                            <div class="setting-item">
-                                <label>Map Layers</label>
-                                <div class="checkbox-group">
-                                    <label class="checkbox-item">
-                                        <input type="checkbox" id="show-traffic" checked> Traffic
-                                    </label>
-                                    <label class="checkbox-item">
-                                        <input type="checkbox" id="show-transit"> Transit
-                                    </label>
-                                    <label class="checkbox-item">
-                                        <input type="checkbox" id="show-bicycle"> Bicycle
-                                    </label>
-                                </div>
-                            </div>
+                <div class="emergency-status" id="status-container">
+                    <h3>Emergency Status</h3>
+                    <div class="status-details">
+                        <div class="status-item">
+                            <span class="status-label">Current Status:</span>
+                            <span class="status-value" id="current-status">Ready</span>
                         </div>
-
-                        <div class="settings-group">
-                            <h3>Navigation</h3>
-                            <div class="setting-item">
-                                <label>Voice Guidance</label>
-                                <select id="voice-guidance">
-                                    <option value="on">On</option>
-                                    <option value="off">Off</option>
-                                    <option value="alerts">Alerts Only</option>
-                                </select>
-                            </div>
-                            <div class="setting-item">
-                                <label>Units</label>
-                                <select id="distance-units">
-                                    <option value="km">Kilometers</option>
-                                    <option value="mi">Miles</option>
-                                </select>
-                            </div>
+                        <div class="status-item">
+                            <span class="status-label">Destination:</span>
+                            <span class="status-value" id="destination-value">Not Selected</span>
                         </div>
-
-                        <div class="settings-group">
-                            <h3>Emergency Response</h3>
-                            <div class="setting-item">
-                                <label>Auto-dispatch</label>
-                                <select id="auto-dispatch">
-                                    <option value="off">Off</option>
-                                    <option value="on">On</option>
-                                    <option value="confirm">Ask for Confirmation</option>
-                                </select>
-                            </div>
-                            <div class="setting-item">
-                                <label>Response Priority</label>
-                                <select id="response-priority">
-                                    <option value="nearest">Nearest Facility</option>
-                                    <option value="specialized">Specialized Care</option>
-                                    <option value="capacity">Available Capacity</option>
-                                </select>
-                            </div>
+                        <div class="status-item">
+                            <span class="status-label">ETA:</span>
+                            <span class="status-value" id="eta-value">--:--</span>
                         </div>
-
-                        <div class="settings-actions">
-                            <button onclick="saveQuickSettings()" class="primary-btn">Save Settings</button>
-                            <button onclick="resetQuickSettings()" class="secondary-btn">Reset to Default</button>
+                        <div class="status-item">
+                            <span class="status-label">Distance:</span>
+                            <span class="status-value" id="distance-value">-- km</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Weather:</span>
+                            <span class="status-value" id="weather-status">☁️ Cloudy - Slight visibility reduction</span>
                         </div>
                     </div>
                 </div>
@@ -407,112 +242,158 @@
                 </div>
                 <div id="directions-panel" class="directions-panel hidden">
                     <div class="directions-header">
-                        <div class="header-top">
-                            <h3>Directions</h3>
-                            <div class="header-actions">
-                                <div id="routing-alternatives" class="routing-alternatives">
-                                    <!-- Leaflet Routing Machine alternatives will be populated here -->
-                                </div>
-                                <button onclick="hideDirectionsPanel()" class="close-btn">×</button>
+                        <h3>Directions</h3>
+                        <button onclick="hideDirectionsPanel()" class="close-btn">×</button>
+                    </div>
+                    <div class="directions-content">
+                        <div class="directions-summary">
+                            <div class="summary-item">
+                                <span class="summary-label">Total Distance:</span>
+                                <span id="total-distance" class="summary-value">-- km</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Estimated Time:</span>
+                                <span id="total-time" class="summary-value">--:--</span>
                             </div>
                         </div>
-                        <div class="routing-controls">
-                            <div class="routing-profile">
-                                <select id="routing-profile">
-                                    <option value="car">Car</option>
-                                    <option value="bike">Bicycle</option>
-                                    <option value="foot">Walking</option>
+                        <div class="route-options">
+                            <div class="route-tabs">
+                                <button class="route-tab active" onclick="showRouteOption('fastest')">Fastest</button>
+                                <button class="route-tab" onclick="showRouteOption('shortest')">Shortest</button>
+                                <button class="route-tab" onclick="showRouteOption('safest')">Safest</button>
+                            </div>
+                            <div class="alternative-routes" id="alternative-routes">
+                                <!-- Alternative routes will be populated here -->
+                            </div>
+                        </div>
+                        <div class="directions-steps" id="directions-steps">
+                            <!-- Direction steps will be populated dynamically -->
+                        </div>
+                        <div class="directions-actions">
+                            <button onclick="startNavigation()" class="primary-btn">Start Navigation</button>
+                            <button onclick="showAlternativeRoutes()" class="secondary-btn">Show Alternatives</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Modals Container -->
+        <div class="modal-overlay" id="modal-overlay">
+            <!-- Settings Modal -->
+            <div class="modal-dialog" id="settings-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Settings</h2>
+                        <button class="modal-close" onclick="closeSettingsModal()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="settings-section">
+                            <h3>Display Settings</h3>
+                            <div class="setting-item">
+                                <label>Map Style</label>
+                                <select id="map-style-select" onchange="updateMapStyle(this.value)">
+                                    <option value="default">Default</option>
+                                    <option value="satellite">Satellite</option>
+                                    <option value="terrain">Terrain</option>
+                                    <option value="dark">Dark Mode</option>
                                 </select>
                             </div>
-                            <div class="routing-options">
-                                <button onclick="showAlternativeRoutes()" class="alt-routes-btn">
-                                    <span class="alt-icon">🔄</span> Alt Routes
-                                </button>
-                                <button onclick="reverseRoute()" class="reverse-btn">
-                                    <span class="reverse-icon">↔️</span> Reverse
-                                </button>
+                            <div class="setting-item">
+                                <label>Units</label>
+                                <select id="units-select" onchange="updateUnits(this.value)">
+                                    <option value="metric">Metric (km)</option>
+                                    <option value="imperial">Imperial (miles)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Notification Settings</h3>
+                            <div class="setting-item">
+                                <label>Emergency Alerts</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="emergency-alerts" onchange="updateNotificationSetting('emergency', this.checked)" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>Traffic Updates</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="traffic-updates" onchange="updateNotificationSetting('traffic', this.checked)" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>Weather Alerts</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="weather-alerts" onchange="updateNotificationSetting('weather', this.checked)" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Accessibility</h3>
+                            <div class="setting-item">
+                                <label>High Contrast Mode</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="high-contrast" onchange="updateAccessibilitySetting('contrast', this.checked)">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>Text Size</label>
+                                <select id="text-size-select" onchange="updateAccessibilitySetting('textSize', this.value)">
+                                    <option value="small">Small</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="large">Large</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="directions-content">
-                        <div class="directions-inputs">
-                            <div class="input-group">
-                                <label>Starting Point</label>
-                                <div class="location-input">
-                                    <input type="text" id="start-location" placeholder="Enter starting point">
-                                    <button onclick="useCurrentLocation()" class="location-btn">
-                                        <span class="location-icon">📍</span>
-                                    </button>
-                                </div>
-                            </div>
+                    <div class="modal-footer">
+                        <button onclick="saveSettings()" class="btn btn-primary">Save Changes</button>
+                        <button onclick="resetSettings()" class="btn btn-secondary">Reset to Default</button>
+                    </div>
+                </div>
+            </div>
 
-                            <div class="input-group">
-                                <label>Destination</label>
-                                <div class="location-input">
-                                    <input type="text" id="end-location" placeholder="Enter destination">
-                                    <button onclick="selectFromMap()" class="map-btn">
-                                        <span class="map-icon">🗺️</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="route-options">
-                                <h4>Route Options</h4>
-                                <div class="option-group">
-                                    <label class="checkbox-item">
-                                        <input type="checkbox" id="avoid-tolls"> Avoid Tolls
-                                    </label>
-                                    <label class="checkbox-item">
-                                        <input type="checkbox" id="avoid-highways"> Avoid Highways
-                                    </label>
-                                    <label class="checkbox-item">
-                                        <input type="checkbox" id="use-green-corridor"> Use Green Corridor
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="transport-mode">
-                                <h4>Transport Mode</h4>
-                                <div class="mode-buttons">
-                                    <button class="mode-btn active" data-mode="car">
-                                        <span class="mode-icon">🚗</span> Car
-                                    </button>
-                                    <button class="mode-btn" data-mode="ambulance">
-                                        <span class="mode-icon">🚑</span> Ambulance
-                                    </button>
-                                    <button class="mode-btn" data-mode="helicopter">
-                                        <span class="mode-icon">🚁</span> Helicopter
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="route-summary">
-                                <div class="summary-item">
-                                    <span class="summary-label">Distance:</span>
-                                    <span class="summary-value" id="route-distance">-- km</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">Duration:</span>
-                                    <span class="summary-value" id="route-duration">-- min</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">Traffic:</span>
-                                    <span class="summary-value" id="route-traffic">Checking...</span>
-                                </div>
-                            </div>
-
-                            <div class="action-buttons">
-                                <button onclick="calculateRoute()" class="primary-btn">Calculate Route</button>
-                                <button onclick="startNavigation()" class="success-btn">Start Navigation</button>
-                                <button onclick="clearRoute()" class="secondary-btn">Clear Route</button>
-                            </div>
+            <!-- History Modal -->
+            <div class="modal-dialog" id="history-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Emergency History</h2>
+                        <button class="modal-close" onclick="closeHistoryModal()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="history-filters">
+                            <select id="history-type-filter" onchange="filterHistory()">
+                                <option value="all">All Types</option>
+                                <option value="emergency">Emergency</option>
+                                <option value="navigation">Navigation</option>
+                                <option value="traffic">Traffic</option>
+                            </select>
+                            <input type="date" id="history-date-filter" onchange="filterHistory()">
+                            <button onclick="filterHistory()" class="btn btn-filter">Filter</button>
                         </div>
+                        <div class="history-list" id="history-list">
+                            <!-- History items will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="turn-by-turn" id="turn-by-turn">
-                            <h4>Turn-by-Turn Directions</h4>
-                            <div class="directions-list" id="directions-list">
-                                <!-- Directions will be populated here -->
-                            </div>
+            <!-- Alternative Routes Modal -->
+            <div class="modal-dialog" id="alternative-routes-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Alternative Routes</h2>
+                        <button class="modal-close" onclick="closeAlternativeRoutesModal()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="routes-container" id="routes-container">
+                            <!-- Alternative routes will be listed here -->
                         </div>
                     </div>
                 </div>
@@ -625,266 +506,602 @@
     <!-- Notification Container -->
     <div id="notification-container" class="notification-container"></div>
 
-    <!-- Modal Container -->
-    <div id="modal-container" class="modal-container hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title"></h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
+    <!-- Floating History Dialog -->
+    <div id="floating-history" class="floating-dialog">
+        <div class="floating-header">
+            <h3>Recent History</h3>
+            <div class="floating-controls">
+                <button onclick="toggleHistoryView()" class="floating-btn" title="Toggle View">
+                    <span class="toggle-icon">≡</span>
+                </button>
+                <button onclick="closeFloatingHistory()" class="floating-btn" title="Close">
+                    <span class="close-icon">×</span>
+                </button>
             </div>
-            <div id="modal-body" class="modal-body">
+        </div>
+        <div class="floating-content">
+            <div class="history-filters">
+                <select id="floating-history-filter" onchange="filterFloatingHistory()">
+                    <option value="all">All Events</option>
+                    <option value="emergency">Emergency</option>
+                    <option value="navigation">Navigation</option>
+                    <option value="traffic">Traffic</option>
+                </select>
+                <input type="date" id="floating-history-date" onchange="filterFloatingHistory()">
+            </div>
+            <div class="floating-history-list" id="floating-history-list">
+                <!-- History items will be populated here -->
             </div>
         </div>
     </div>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeSettingsModal()">&times;</span>
-            <h2>Settings</h2>
-            <div class="settings-container">
-                <div class="settings-tabs">
-                    <button class="settings-tab-btn active" onclick="showSettingsTab('general')">General</button>
-                    <button class="settings-tab-btn" onclick="showSettingsTab('map')">Map</button>
-                    <button class="settings-tab-btn" onclick="showSettingsTab('emergency')">Emergency</button>
-                    <button class="settings-tab-btn" onclick="showSettingsTab('notifications')">Notifications</button>
-                </div>
+    <style>
+        .floating-dialog {
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            width: 300px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
 
-                <!-- General Settings Tab -->
-                <div id="general-settings" class="settings-tab active">
-                    <div class="settings-section">
-                        <h3>Display Settings</h3>
-                        <div class="setting-item">
-                            <label>Theme</label>
-                            <select id="theme-select">
-                                <option value="light">Light</option>
-                                <option value="dark">Dark</option>
-                                <option value="system">System Default</option>
-                            </select>
-                        </div>
-                        <div class="setting-item">
-                            <label>Language</label>
-                            <select id="language-select">
-                                <option value="en">English</option>
-                                <option value="es">Spanish</option>
-                                <option value="fr">French</option>
-                                <option value="de">German</option>
-                            </select>
-                        </div>
-                        <div class="setting-item">
-                            <label>Font Size</label>
-                            <select id="font-size-select">
-                                <option value="small">Small</option>
-                                <option value="medium" selected>Medium</option>
-                                <option value="large">Large</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+        .floating-dialog.collapsed {
+            width: 50px;
+            overflow: hidden;
+        }
 
-                <!-- Map Settings Tab -->
-                <div id="map-settings" class="settings-tab">
-                    <div class="settings-section">
-                        <h3>Map Display</h3>
-                        <div class="setting-item">
-                            <label>Default Map Style</label>
-                            <select id="map-style-select">
-                                <option value="standard">Standard</option>
-                                <option value="satellite">Satellite</option>
-                                <option value="terrain">Terrain</option>
-                                <option value="hybrid">Hybrid</option>
-                            </select>
-                        </div>
-                        <div class="setting-item">
-                            <label>Default Zoom Level</label>
-                            <select id="zoom-level-select">
-                                <option value="city">City Level</option>
-                                <option value="district">District Level</option>
-                                <option value="street">Street Level</option>
-                            </select>
-                        </div>
-                        <div class="setting-item">
-                            <label>Map Layers</label>
-                            <div class="checkbox-group">
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="traffic-layer" checked> Traffic
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="transit-layer"> Transit
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="bicycle-layer"> Bicycle
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        .floating-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f5f5f5;
+            border-radius: 8px 8px 0 0;
+        }
 
-                <!-- Emergency Settings Tab -->
-                <div id="emergency-settings" class="settings-tab">
-                    <div class="settings-section">
-                        <h3>Emergency Preferences</h3>
-                        <div class="setting-item">
-                            <label>Default Emergency Type</label>
-                            <select id="default-emergency-select">
-                                <option value="accident">Road Accident</option>
-                                <option value="cardiac">Cardiac Emergency</option>
-                                <option value="neuro">Neurological Emergency</option>
-                                <option value="trauma">Trauma/Injury</option>
-                                <option value="respiratory">Respiratory Distress</option>
-                                <option value="burn">Burn Emergency</option>
-                            </select>
-                        </div>
-                        <div class="setting-item">
-                            <label>Response Priority</label>
-                            <select id="priority-select">
-                                <option value="nearest">Nearest Facility</option>
-                                <option value="specialized">Specialized Care</option>
-                                <option value="capacity">Available Capacity</option>
-                            </select>
-                        </div>
-                        <div class="setting-item">
-                            <label>Auto Actions</label>
-                            <div class="checkbox-group">
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="auto-dispatch"> Auto-dispatch
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="auto-navigate"> Auto-navigate
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="auto-alert"> Auto-alert contacts
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        .floating-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
 
-                <!-- Notifications Settings Tab -->
-                <div id="notifications-settings" class="settings-tab">
-                    <div class="settings-section">
-                        <h3>Notification Preferences</h3>
-                        <div class="setting-item">
-                            <label>Notification Types</label>
-                            <div class="checkbox-group">
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="notify-emergency" checked> Emergency Alerts
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="notify-updates" checked> Status Updates
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="notify-traffic"> Traffic Alerts
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="notify-weather"> Weather Alerts
-                                </label>
-                            </div>
-                        </div>
-                        <div class="setting-item">
-                            <label>Sound Alerts</label>
-                            <select id="sound-alert-select">
-                                <option value="all">All Sounds</option>
-                                <option value="emergency">Emergency Only</option>
-                                <option value="none">None</option>
-                            </select>
-                        </div>
-                        <div class="setting-item">
-                            <label>Alert Volume</label>
-                            <select id="volume-select">
-                                <option value="low">Low</option>
-                                <option value="medium" selected>Medium</option>
-                                <option value="high">High</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+        .floating-controls {
+            display: flex;
+            gap: 5px;
+        }
 
-                <div class="settings-actions">
-                    <button onclick="saveSettings()" class="primary-btn">Save Changes</button>
-                    <button onclick="resetSettings()" class="secondary-btn">Reset to Default</button>
-                </div>
-            </div>
-        </div>
-    </div>
+        .floating-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 16px;
+            color: #666;
+        }
 
-    <!-- History Modal -->
-    <div id="history-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeHistoryModal()">&times;</span>
-            <h2>Emergency History</h2>
-            <div class="history-container">
-                <div class="history-filters">
-                    <div class="filter-group">
-                        <label>Time Range</label>
-                        <select id="time-range-select">
-                            <option value="24h">Last 24 Hours</option>
-                            <option value="7d">Last 7 Days</option>
-                            <option value="30d">Last 30 Days</option>
-                            <option value="all">All Time</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Emergency Type</label>
-                        <select id="emergency-type-filter">
-                            <option value="all">All Types</option>
-                            <option value="accident">Road Accident</option>
-                            <option value="cardiac">Cardiac Emergency</option>
-                            <option value="neuro">Neurological Emergency</option>
-                            <option value="trauma">Trauma/Injury</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Status</label>
-                        <select id="status-filter">
-                            <option value="all">All Status</option>
-                            <option value="completed">Completed</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="cancelled">Cancelled</option>
-                        </select>
-                    </div>
-                </div>
+        .floating-btn:hover {
+            color: #333;
+        }
 
-                <div class="history-list" id="history-list">
-                    <!-- History items will be populated dynamically -->
-                    <div class="history-item">
-                        <div class="history-item-header">
-                            <span class="emergency-type">Road Accident</span>
-                            <span class="emergency-time">2024-03-20 14:30</span>
-                        </div>
-                        <div class="history-item-details">
-                            <div class="detail-row">
-                                <span class="detail-label">Location:</span>
-                                <span class="detail-value">123 Main Street, City</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Destination:</span>
-                                <span class="detail-value">City General Hospital</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Status:</span>
-                                <span class="detail-value status-completed">Completed</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Response Time:</span>
-                                <span class="detail-value">8 minutes</span>
-                            </div>
-                        </div>
-                        <div class="history-item-actions">
-                            <button onclick="viewHistoryDetails(1)" class="action-btn">View Details</button>
-                            <button onclick="recreateEmergency(1)" class="action-btn">Recreate</button>
-                        </div>
-                    </div>
-                </div>
+        .floating-content {
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
 
-                <div class="history-pagination">
-                    <button class="pagination-btn" onclick="previousPage()">Previous</button>
-                    <span class="page-info">Page 1 of 5</span>
-                    <button class="pagination-btn" onclick="nextPage()">Next</button>
-                </div>
-            </div>
-        </div>
-    </div>
+        .history-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .history-filters select,
+        .history-filters input {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .floating-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item {
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+
+        .history-item:hover {
+            background: #f0f0f0;
+        }
+
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .history-item-type {
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        .history-item-time {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .history-item-details {
+            font-size: 0.9em;
+            color: #444;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            overflow: hidden;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+        }
+
+        .modal-dialog {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            max-height: calc(100vh - 40px);
+            display: none;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-overlay.active .modal-dialog {
+            transform: translateY(0);
+        }
+
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-height: calc(100vh - 40px);
+        }
+
+        .modal-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 12px 16px;
+            overflow-y: auto;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .modal-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .settings-section {
+            margin-bottom: 16px;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 10px;
+            color: #444;
+            font-size: 1em;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 4px 0;
+        }
+
+        .setting-item label {
+            font-size: 0.9em;
+        }
+
+        .setting-item select {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+            width: 140px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #0066cc;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #0066cc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052a3;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e5e5;
+        }
+
+        .route-option {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .route-info h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .route-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .route-metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .metric-label {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .traffic-low {
+            color: #28a745;
+        }
+
+        .traffic-medium {
+            color: #ffc107;
+        }
+
+        .traffic-high {
+            color: #dc3545;
+        }
+
+        .route-description {
+            font-size: 0.9em;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .route-steps-preview {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .preview-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .step-icon {
+            margin-right: 8px;
+            color: #0066cc;
+        }
+
+        .more-steps {
+            text-align: center;
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .select-route-btn {
+            width: 100%;
+            padding: 8px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .select-route-btn:hover {
+            background: #0052a3;
+        }
+
+        /* Add these styles for the facility details modal */
+        .facility-details-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .facility-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .facility-header h2 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .facility-type {
+            display: inline-block;
+            background: #0066cc;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .facility-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .facility-actions {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .facility-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .facility-actions .primary-btn {
+            background: #0066cc;
+            color: white;
+        }
+
+        .facility-actions .primary-btn:hover {
+            background: #0052a3;
+        }
+
+        .facility-actions .secondary-btn {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .facility-actions .secondary-btn:hover {
+            background: #e9ecef;
+        }
+
+        .facility-details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .facility-detail-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .facility-detail-item div:last-child {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .facility-services {
+            padding: 20px;
+        }
+
+        .facility-services h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .service-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .service-icon {
+            color: #0066cc;
+            font-size: 1.2em;
+        }
+
+        .service-name {
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: all 0.2s ease;
+            z-index: 1;
+        }
+
+        .close-btn:hover {
+            background: white;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 
     <!-- Leaflet JS - Free Map API -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -892,5 +1109,802 @@
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
     <!-- Main JavaScript -->
     <script src="script.js"></script>
+    
+    <!-- Navigation and Modal Functions -->
+    <script>
+        // Navigation Functions
+        function startNavigation() {
+            const directionsPanel = document.getElementById('directions-panel');
+            if (!directionsPanel.classList.contains('hidden')) {
+                // Start turn-by-turn navigation
+                const steps = document.getElementById('directions-steps');
+                if (steps && steps.children.length > 0) {
+                    // Update UI to show active navigation
+                    document.getElementById('current-status').textContent = 'Navigating';
+                    // Add active navigation class
+                    directionsPanel.classList.add('active-navigation');
+                    // Show navigation controls
+                    showNavigationControls();
+                } else {
+                    showNotification('No route selected for navigation', 'error');
+                }
+            }
+        }
+
+        function showNavigationControls() {
+            const controls = document.createElement('div');
+            controls.className = 'navigation-controls';
+            controls.innerHTML = `
+                <button onclick="pauseNavigation()" class="nav-control-btn">⏸️ Pause</button>
+                <button onclick="stopNavigation()" class="nav-control-btn">⏹️ Stop</button>
+                <button onclick="skipStep()" class="nav-control-btn">⏭️ Skip Step</button>
+            `;
+            document.querySelector('.directions-actions').appendChild(controls);
+        }
+
+        function pauseNavigation() {
+            document.getElementById('current-status').textContent = 'Navigation Paused';
+            showNotification('Navigation paused', 'info');
+        }
+
+        function stopNavigation() {
+            document.getElementById('current-status').textContent = 'Ready';
+            document.getElementById('directions-panel').classList.remove('active-navigation');
+            const controls = document.querySelector('.navigation-controls');
+            if (controls) controls.remove();
+            showNotification('Navigation stopped', 'info');
+        }
+
+        function skipStep() {
+            const steps = document.getElementById('directions-steps');
+            const currentStep = steps.querySelector('.active-step');
+            if (currentStep) {
+                currentStep.classList.remove('active-step');
+                const nextStep = currentStep.nextElementSibling;
+                if (nextStep) {
+                    nextStep.classList.add('active-step');
+                    showNotification('Moving to next step', 'info');
+                }
+            }
+        }
+
+        // Modal Functions
+        function showModal(modalId) {
+            const overlay = document.getElementById('modal-overlay');
+            const modal = document.getElementById(modalId);
+            
+            // Reset scroll position
+            modal.querySelector('.modal-body').scrollTop = 0;
+            
+            overlay.style.display = 'flex';
+            modal.style.display = 'block';
+            
+            // Trigger reflow
+            overlay.offsetHeight;
+            
+            overlay.classList.add('active');
+            
+            // Prevent body scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const overlay = document.getElementById('modal-overlay');
+            const modal = document.getElementById(modalId);
+            
+            overlay.classList.remove('active');
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                modal.style.display = 'none';
+                
+                // Restore body scrolling
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        function showSettings() {
+            showModal('settings-modal');
+            loadCurrentSettings();
+        }
+
+        function closeSettingsModal() {
+            closeModal('settings-modal');
+        }
+
+        function showEmergencyHistory() {
+            showModal('history-modal');
+            loadHistoryData();
+        }
+
+        function closeHistoryModal() {
+            closeModal('history-modal');
+        }
+
+        // Settings Functions
+        function loadCurrentSettings() {
+            // Load saved settings from localStorage or use defaults
+            const settings = JSON.parse(localStorage.getItem('settings')) || {
+                mapStyle: 'default',
+                units: 'metric',
+                notifications: {
+                    emergency: true,
+                    traffic: true,
+                    weather: true
+                },
+                accessibility: {
+                    contrast: false,
+                    textSize: 'medium'
+                }
+            };
+
+            // Apply settings to form
+            document.getElementById('map-style-select').value = settings.mapStyle;
+            document.getElementById('units-select').value = settings.units;
+            document.getElementById('emergency-alerts').checked = settings.notifications.emergency;
+            document.getElementById('traffic-updates').checked = settings.notifications.traffic;
+            document.getElementById('weather-alerts').checked = settings.notifications.weather;
+            document.getElementById('high-contrast').checked = settings.accessibility.contrast;
+            document.getElementById('text-size-select').value = settings.accessibility.textSize;
+        }
+
+        function updateMapStyle(value) {
+            const settings = JSON.parse(localStorage.getItem('settings')) || {};
+            settings.mapStyle = value;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            // Apply map style changes
+            const map = window.map;
+            if (map) {
+                switch (value) {
+                    case 'satellite':
+                        map.setStyle('satellite');
+                        break;
+                    case 'terrain':
+                        map.setStyle('terrain');
+                        break;
+                    case 'dark':
+                        map.setStyle('dark');
+                        break;
+                    default:
+                        map.setStyle('default');
+                }
+            }
+            showNotification(`Map style updated to ${value}`, 'success');
+        }
+
+        function updateUnits(value) {
+            const settings = JSON.parse(localStorage.getItem('settings')) || {};
+            settings.units = value;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            // Update all distance displays
+            const distanceElements = document.querySelectorAll('.distance-value');
+            distanceElements.forEach(element => {
+                const value = parseFloat(element.dataset.meters);
+                if (value) {
+                    if (value === 'imperial') {
+                        const miles = value * 0.000621371;
+                        element.textContent = `${miles.toFixed(1)} mi`;
+                    } else {
+                        const kilometers = value / 1000;
+                        element.textContent = `${kilometers.toFixed(1)} km`;
+                    }
+                }
+            });
+            showNotification(`Units updated to ${value}`, 'success');
+        }
+
+        function updateNotificationSetting(type, value) {
+            const settings = JSON.parse(localStorage.getItem('settings')) || {};
+            if (!settings.notifications) {
+                settings.notifications = {};
+            }
+            settings.notifications[type] = value;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            const notificationTypes = {
+                emergency: 'Emergency Alerts',
+                traffic: 'Traffic Updates',
+                weather: 'Weather Alerts'
+            };
+            showNotification(`${notificationTypes[type]} ${value ? 'enabled' : 'disabled'}`, 'success');
+        }
+
+        function updateAccessibilitySetting(type, value) {
+            const settings = JSON.parse(localStorage.getItem('settings')) || {};
+            if (!settings.accessibility) {
+                settings.accessibility = {};
+            }
+            settings.accessibility[type] = value;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            if (type === 'contrast') {
+                document.body.classList.toggle('high-contrast', value);
+                showNotification(`High contrast mode ${value ? 'enabled' : 'disabled'}`, 'success');
+            } else if (type === 'textSize') {
+                document.body.className = document.body.className.replace(/text-size-\w+/, '');
+                document.body.classList.add(`text-size-${value}`);
+                showNotification(`Text size updated to ${value}`, 'success');
+            }
+        }
+
+        function saveSettings() {
+            const settings = {
+                mapStyle: document.getElementById('map-style-select').value,
+                units: document.getElementById('units-select').value,
+                notifications: {
+                    emergency: document.getElementById('emergency-alerts').checked,
+                    traffic: document.getElementById('traffic-updates').checked,
+                    weather: document.getElementById('weather-alerts').checked
+                },
+                accessibility: {
+                    contrast: document.getElementById('high-contrast').checked,
+                    textSize: document.getElementById('text-size-select').value
+                }
+            };
+
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            // Apply all settings
+            updateMapStyle(settings.mapStyle);
+            updateUnits(settings.units);
+            Object.entries(settings.notifications).forEach(([type, value]) => {
+                updateNotificationSetting(type, value);
+            });
+            Object.entries(settings.accessibility).forEach(([type, value]) => {
+                updateAccessibilitySetting(type, value);
+            });
+
+            showNotification('All settings saved successfully', 'success');
+            closeSettingsModal();
+        }
+
+        function resetSettings() {
+            const defaultSettings = {
+                mapStyle: 'default',
+                units: 'metric',
+                notifications: {
+                    emergency: true,
+                    traffic: true,
+                    weather: true
+                },
+                accessibility: {
+                    contrast: false,
+                    textSize: 'medium'
+                }
+            };
+
+            // Update form values
+            document.getElementById('map-style-select').value = defaultSettings.mapStyle;
+            document.getElementById('units-select').value = defaultSettings.units;
+            document.getElementById('emergency-alerts').checked = defaultSettings.notifications.emergency;
+            document.getElementById('traffic-updates').checked = defaultSettings.notifications.traffic;
+            document.getElementById('weather-alerts').checked = defaultSettings.notifications.weather;
+            document.getElementById('high-contrast').checked = defaultSettings.accessibility.contrast;
+            document.getElementById('text-size-select').value = defaultSettings.accessibility.textSize;
+
+            // Save and apply default settings
+            localStorage.setItem('settings', JSON.stringify(defaultSettings));
+            
+            // Apply all settings
+            updateMapStyle(defaultSettings.mapStyle);
+            updateUnits(defaultSettings.units);
+            Object.entries(defaultSettings.notifications).forEach(([type, value]) => {
+                updateNotificationSetting(type, value);
+            });
+            Object.entries(defaultSettings.accessibility).forEach(([type, value]) => {
+                updateAccessibilitySetting(type, value);
+            });
+
+            showNotification('Settings reset to default', 'info');
+        }
+
+        // History Functions
+        function loadHistoryData() {
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+            
+            // Get filter values
+            const typeFilter = document.getElementById('history-type-filter').value;
+            const dateFilter = document.getElementById('history-date-filter').value;
+            
+            // Sample history data
+            const historyData = [
+                { type: 'emergency', date: '2024-03-15', time: '10:30 AM', details: 'Emergency response dispatched to Main St', status: 'Completed' },
+                { type: 'navigation', date: '2024-03-15', time: '10:15 AM', details: 'Route calculated to City Hospital', status: 'Completed' },
+                { type: 'traffic', date: '2024-03-15', time: '10:00 AM', details: 'Traffic light override activated', status: 'Active' }
+            ];
+
+            // Filter and display history items
+            historyData
+                .filter(item => {
+                    if (typeFilter !== 'all' && item.type !== typeFilter) return false;
+                    if (dateFilter && item.date !== dateFilter) return false;
+                    return true;
+                })
+                .forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div class="history-item-header">
+                            <span class="history-item-type">${item.type}</span>
+                            <span class="history-item-time">${item.time}</span>
+                        </div>
+                        <div class="history-item-details">
+                            <div>${item.details}</div>
+                            <div class="history-item-status">${item.status}</div>
+                        </div>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+        }
+
+        function filterHistory() {
+            loadHistoryData();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal-overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                const activeModal = this.querySelector('.modal-dialog[style*="display: block"]');
+                if (activeModal) {
+                    closeModal(activeModal.id);
+                }
+            }
+        });
+
+        // Alternative Routes Functions
+        function showAlternativeRoutes() {
+            showModal('alternative-routes-modal');
+            loadAlternativeRoutes();
+        }
+
+        function closeAlternativeRoutesModal() {
+            closeModal('alternative-routes-modal');
+        }
+
+        function loadAlternativeRoutes() {
+            const routesContainer = document.getElementById('routes-container');
+            routesContainer.innerHTML = '';
+
+            // Sample alternative routes data with more details
+            const alternativeRoutes = [
+                {
+                    id: 1,
+                    name: 'Fastest Route',
+                    distance: '5.2 km',
+                    time: '12 min',
+                    traffic: 'Low',
+                    type: 'fastest',
+                    description: 'Quickest path with minimal traffic',
+                    steps: [
+                        { instruction: 'Head north on Main St', distance: '0.5 km' },
+                        { instruction: 'Turn right onto Park Ave', distance: '1.2 km' },
+                        { instruction: 'Continue straight', distance: '3.5 km' }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: 'Shortest Route',
+                    distance: '4.8 km',
+                    time: '15 min',
+                    traffic: 'Medium',
+                    type: 'shortest',
+                    description: 'Most direct path with moderate traffic',
+                    steps: [
+                        { instruction: 'Head east on Oak St', distance: '0.3 km' },
+                        { instruction: 'Turn left onto Pine Rd', distance: '2.1 km' },
+                        { instruction: 'Turn right onto Maple Dr', distance: '2.4 km' }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: 'Safest Route',
+                    distance: '6.1 km',
+                    time: '18 min',
+                    traffic: 'Low',
+                    type: 'safest',
+                    description: 'Safest path with well-lit roads',
+                    steps: [
+                        { instruction: 'Head west on Cedar Ln', distance: '0.8 km' },
+                        { instruction: 'Turn left onto Elm St', distance: '2.5 km' },
+                        { instruction: 'Continue on River Rd', distance: '2.8 km' }
+                    ]
+                }
+            ];
+
+            alternativeRoutes.forEach(route => {
+                const routeElement = document.createElement('div');
+                routeElement.className = 'route-option';
+                routeElement.innerHTML = `
+                    <div class="route-info">
+                        <h3>${route.name}</h3>
+                        <div class="route-details">
+                            <div class="route-metric">
+                                <span class="metric-label">Distance:</span>
+                                <span class="metric-value">${route.distance}</span>
+                            </div>
+                            <div class="route-metric">
+                                <span class="metric-label">Time:</span>
+                                <span class="metric-value">${route.time}</span>
+                            </div>
+                            <div class="route-metric">
+                                <span class="metric-label">Traffic:</span>
+                                <span class="metric-value traffic-${route.traffic.toLowerCase()}">${route.traffic}</span>
+                            </div>
+                        </div>
+                        <p class="route-description">${route.description}</p>
+                        <div class="route-steps-preview">
+                            ${route.steps.slice(0, 2).map(step => `
+                                <div class="preview-step">
+                                    <span class="step-icon">→</span>
+                                    <span class="step-text">${step.instruction}</span>
+                                </div>
+                            `).join('')}
+                            ${route.steps.length > 2 ? '<div class="more-steps">+ more steps</div>' : ''}
+                        </div>
+                    </div>
+                    <button onclick="selectRoute(${route.id})" class="select-route-btn">Select Route</button>
+                `;
+                routesContainer.appendChild(routeElement);
+            });
+        }
+
+        function selectRoute(routeId) {
+            const routes = [
+                {
+                    id: 1,
+                    name: 'Fastest Route',
+                    distance: '5.2 km',
+                    time: '12 min',
+                    traffic: 'Low',
+                    type: 'fastest',
+                    steps: [
+                        { instruction: 'Head north on Main St', distance: '0.5 km' },
+                        { instruction: 'Turn right onto Park Ave', distance: '1.2 km' },
+                        { instruction: 'Continue straight', distance: '3.5 km' }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: 'Shortest Route',
+                    distance: '4.8 km',
+                    time: '15 min',
+                    traffic: 'Medium',
+                    type: 'shortest',
+                    steps: [
+                        { instruction: 'Head east on Oak St', distance: '0.3 km' },
+                        { instruction: 'Turn left onto Pine Rd', distance: '2.1 km' },
+                        { instruction: 'Turn right onto Maple Dr', distance: '2.4 km' }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: 'Safest Route',
+                    distance: '6.1 km',
+                    time: '18 min',
+                    traffic: 'Low',
+                    type: 'safest',
+                    steps: [
+                        { instruction: 'Head west on Cedar Ln', distance: '0.8 km' },
+                        { instruction: 'Turn left onto Elm St', distance: '2.5 km' },
+                        { instruction: 'Continue on River Rd', distance: '2.8 km' }
+                    ]
+                }
+            ];
+
+            const selectedRoute = routes.find(route => route.id === routeId);
+            if (selectedRoute) {
+                // Update the main directions panel
+                document.getElementById('total-distance').textContent = selectedRoute.distance;
+                document.getElementById('total-time').textContent = selectedRoute.time;
+                
+                // Update the active route tab
+                const routeType = selectedRoute.type;
+                showRouteOption(routeType);
+                
+                // Update the directions steps
+                updateDirectionsSteps(routeType);
+                
+                // Update status section
+                document.getElementById('current-status').textContent = 'Route Selected';
+                document.getElementById('distance-value').textContent = selectedRoute.distance;
+                document.getElementById('eta-value').textContent = selectedRoute.time;
+                
+                // Close the modal
+                closeAlternativeRoutesModal();
+                
+                // Show success notification
+                showNotification(`Selected ${selectedRoute.name}`, 'success');
+                
+                // Add to history
+                addHistoryEntry('Navigation', `Selected ${selectedRoute.name} - ${selectedRoute.distance}, ${selectedRoute.time}`);
+            }
+        }
+
+        function showRouteOption(option) {
+            // Update active tab
+            const tabs = document.querySelectorAll('.route-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`.route-tab[onclick="showRouteOption('${option}')"]`).classList.add('active');
+
+            // Update route details based on option
+            const routeDetails = {
+                fastest: { distance: '5.2 km', time: '12 min' },
+                shortest: { distance: '4.8 km', time: '15 min' },
+                safest: { distance: '6.1 km', time: '18 min' }
+            };
+
+            document.getElementById('total-distance').textContent = routeDetails[option].distance;
+            document.getElementById('total-time').textContent = routeDetails[option].time;
+
+            // Update the directions steps based on the selected route
+            updateDirectionsSteps(option);
+        }
+
+        function updateDirectionsSteps(routeType) {
+            const steps = document.getElementById('directions-steps');
+            steps.innerHTML = '';
+
+            // Sample steps for different route types
+            const routeSteps = {
+                fastest: [
+                    { instruction: 'Head north on Main St', distance: '0.5 km' },
+                    { instruction: 'Turn right onto Park Ave', distance: '1.2 km' },
+                    { instruction: 'Continue straight', distance: '3.5 km' }
+                ],
+                shortest: [
+                    { instruction: 'Head east on Oak St', distance: '0.3 km' },
+                    { instruction: 'Turn left onto Pine Rd', distance: '2.1 km' },
+                    { instruction: 'Turn right onto Maple Dr', distance: '2.4 km' }
+                ],
+                safest: [
+                    { instruction: 'Head west on Cedar Ln', distance: '0.8 km' },
+                    { instruction: 'Turn left onto Elm St', distance: '2.5 km' },
+                    { instruction: 'Continue on River Rd', distance: '2.8 km' }
+                ]
+            };
+
+            routeSteps[routeType].forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.className = `direction-step ${index === 0 ? 'active-step' : ''}`;
+                stepElement.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">
+                        <div class="step-instruction">${step.instruction}</div>
+                        <div class="step-distance">${step.distance}</div>
+                    </div>
+                `;
+                steps.appendChild(stepElement);
+            });
+        }
+
+        // Floating History Functions
+        function toggleFloatingHistory() {
+            const historyDialog = document.getElementById('floating-history');
+            if (historyDialog.style.display === 'none') {
+                historyDialog.style.display = 'block';
+                loadFloatingHistory();
+            } else {
+                historyDialog.style.display = 'none';
+            }
+        }
+
+        function toggleHistoryView() {
+            const historyDialog = document.getElementById('floating-history');
+            historyDialog.classList.toggle('collapsed');
+        }
+
+        function closeFloatingHistory() {
+            const historyDialog = document.getElementById('floating-history');
+            historyDialog.style.display = 'none';
+        }
+
+        function loadFloatingHistory() {
+            const historyList = document.getElementById('floating-history-list');
+            historyList.innerHTML = '';
+
+            // Sample history data
+            const historyData = [
+                {
+                    type: 'Emergency',
+                    time: '10:30 AM',
+                    date: '2024-03-15',
+                    details: 'Emergency response dispatched to Main St',
+                    status: 'Completed'
+                },
+                {
+                    type: 'Navigation',
+                    time: '10:15 AM',
+                    date: '2024-03-15',
+                    details: 'Route calculated to City Hospital',
+                    status: 'Completed'
+                },
+                {
+                    type: 'Traffic',
+                    time: '10:00 AM',
+                    date: '2024-03-15',
+                    details: 'Traffic light override activated',
+                    status: 'Active'
+                }
+            ];
+
+            historyData.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-item-header">
+                        <span class="history-item-type">${item.type}</span>
+                        <span class="history-item-time">${item.time}</span>
+                    </div>
+                    <div class="history-item-details">
+                        <div>${item.details}</div>
+                        <div class="history-item-status">${item.status}</div>
+                    </div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        function filterFloatingHistory() {
+            const typeFilter = document.getElementById('floating-history-filter').value;
+            const dateFilter = document.getElementById('floating-history-date').value;
+            
+            // Implement filtering logic here
+            loadFloatingHistory(); // Reload with filters
+        }
+
+        // Initialize floating history
+        document.addEventListener('DOMContentLoaded', function() {
+            const historyDialog = document.getElementById('floating-history');
+            historyDialog.style.display = 'none';
+        });
+
+        // Add history entry function
+        function addHistoryEntry(type, details) {
+            const historyList = document.getElementById('floating-history-list');
+            const now = new Date();
+            const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.innerHTML = `
+                <div class="history-item-header">
+                    <span class="history-item-type">${type}</span>
+                    <span class="history-item-time">${time}</span>
+                </div>
+                <div class="history-item-details">
+                    <div>${details}</div>
+                    <div class="history-item-status">Active</div>
+                </div>
+            `;
+            
+            historyList.insertBefore(historyItem, historyList.firstChild);
+        }
+
+        // Add this function before the closing script tag
+        function navigateToFacility() {
+            const facilityName = document.getElementById('facility-name').textContent;
+            const facilityAddress = document.getElementById('facility-address').textContent;
+            
+            // Close the facility details modal
+            closeFacilityDetailsModal();
+            
+            // Show the directions panel
+            const directionsPanel = document.getElementById('directions-panel');
+            directionsPanel.classList.remove('hidden');
+            
+            // Update the destination in the status section
+            document.getElementById('destination-value').textContent = facilityName;
+            
+            // Calculate route to the facility
+            // Note: In a real implementation, you would use the actual coordinates
+            // For now, we'll simulate the route calculation
+            const routeDetails = {
+                distance: '5.2 km',
+                time: '12 min',
+                steps: [
+                    { instruction: 'Head north on Main St', distance: '0.5 km' },
+                    { instruction: 'Turn right onto Park Ave', distance: '1.2 km' },
+                    { instruction: 'Continue straight to ' + facilityName, distance: '3.5 km' }
+                ]
+            };
+            
+            // Update the directions panel
+            document.getElementById('total-distance').textContent = routeDetails.distance;
+            document.getElementById('total-time').textContent = routeDetails.time;
+            
+            // Update the steps
+            const stepsContainer = document.getElementById('directions-steps');
+            stepsContainer.innerHTML = '';
+            routeDetails.steps.forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.className = `direction-step ${index === 0 ? 'active-step' : ''}`;
+                stepElement.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">
+                        <div class="step-instruction">${step.instruction}</div>
+                        <div class="step-distance">${step.distance}</div>
+                    </div>
+                `;
+                stepsContainer.appendChild(stepElement);
+            });
+            
+            // Update the status
+            document.getElementById('current-status').textContent = 'Route Calculated';
+            document.getElementById('distance-value').textContent = routeDetails.distance;
+            document.getElementById('eta-value').textContent = routeDetails.time;
+            
+            // Show success notification
+            showNotification(`Route calculated to ${facilityName}`, 'success');
+            
+            // Add to history
+            addHistoryEntry('Navigation', `Route calculated to ${facilityName}`);
+        }
+
+        function showFacilityDetails(facility) {
+            const modal = document.getElementById('facility-details-modal');
+            const content = modal.querySelector('.facility-details-content');
+            
+            // Update facility information
+            document.getElementById('facility-name').textContent = facility.name;
+            document.getElementById('facility-type').textContent = facility.type;
+            document.getElementById('facility-address').textContent = facility.address;
+            document.getElementById('facility-distance').textContent = facility.distance;
+            document.getElementById('facility-eta').textContent = facility.eta;
+            document.getElementById('facility-hours').textContent = facility.hours;
+            document.getElementById('facility-specialty').textContent = facility.specialty;
+            document.getElementById('facility-beds').textContent = facility.beds;
+            
+            // Set facility image
+            const imageDiv = document.getElementById('facility-image');
+            imageDiv.style.backgroundImage = `url(${facility.image})`;
+            
+            // Update services list
+            const servicesList = document.getElementById('facility-services-list');
+            servicesList.innerHTML = facility.services.map(service => `
+                <div class="service-item">
+                    <span class="service-icon">${service.icon}</span>
+                    <span class="service-name">${service.name}</span>
+                </div>
+            `).join('');
+            
+            // Show the modal
+            modal.style.display = 'flex';
+        }
+
+        function closeFacilityDetailsModal() {
+            const modal = document.getElementById('facility-details-modal');
+            modal.style.display = 'none';
+        }
+
+        // Sample function to demonstrate facility details
+        function showSampleFacility() {
+            const sampleFacility = {
+                name: "City General Hospital",
+                type: "General Hospital",
+                address: "123 Medical Center Drive, City, State 12345",
+                distance: "2.5 km",
+                eta: "8 minutes",
+                hours: "24/7 Emergency Care",
+                specialty: "Multi-Specialty",
+                beds: "250",
+                image: "https://example.com/hospital-image.jpg",
+                services: [
+                    { icon: "🏥", name: "Emergency Care" },
+                    { icon: "💉", name: "Laboratory" },
+                    { icon: "📷", name: "Radiology" },
+                    { icon: "🩺", name: "Outpatient" },
+                    { icon: "👶", name: "Pediatrics" },
+                    { icon: "🧠", name: "Neurology" },
+                    { icon: "❤️", name: "Cardiology" },
+                    { icon: "🦴", name: "Orthopedics" }
+                ]
+            };
+            
+            showFacilityDetails(sampleFacility);
+        }
+    </script>
 </body>
 </html>
